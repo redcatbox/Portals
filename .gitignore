@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+#Other
+*.vs
+*.sln
+Binaries
+Build
+Intermediate
+Saved
