@@ -13,30 +13,30 @@ class PORTALSPLUGIN_API UPortalsFunctionLibrary : public UBlueprintFunctionLibra
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static FVector PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static FVector PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static FVector PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static FRotator PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static FVector PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static bool CheckPortalsValidity(AActor* CurrentPortal, AActor* TargetPortal);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static void GetPortalsTransforms(AActor* CurrentPortal, AActor* TargetPortal, FTransform& CurrentPortalTransform, FTransform& TargetPortalTransform);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static bool CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation);
 
-	UFUNCTION(BlueprintCallable, meta = (Category = "PortalsFunctions"))
+	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static bool CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector);
 };

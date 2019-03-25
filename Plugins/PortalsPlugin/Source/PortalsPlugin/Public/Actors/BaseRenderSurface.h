@@ -32,13 +32,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		USceneComponent* SceneSCC;
 
-	UPROPERTY(EditDefaultsOnly, meta = (Category = "Mesh"))
+	UPROPERTY(EditDefaultsOnly, Category = Mesh)
 		UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditAnywhere, meta = (Category = "Mesh"))
+	UPROPERTY(EditAnywhere, Category = Mesh)
 		UStaticMesh* MeshAsset;
 
-	UPROPERTY(EditAnywhere, meta = (Category = "Mesh"))
+	UPROPERTY(EditAnywhere, Category = Mesh)
 		UMaterialInterface* MaterialAsset;
 
 	UPROPERTY()
@@ -53,28 +53,28 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		USceneCaptureComponent2D* SceneCaptureComponent2D;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		bool bRenderEnabled;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		bool bRT_UseViewportSize;
 
 	UPROPERTY()
 		UTextureRenderTarget2D* RenderTargetTexture;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		FVector2D RenderTargetResolution;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		TEnumAsByte<ETextureRenderTargetFormat> RenderTargetFormat;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		bool bUseUpdateDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		float MaxCaptureUpdateDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		bool bUseUpdateDirection;
 
 	UFUNCTION(BlueprintCallable)

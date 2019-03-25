@@ -1,23 +1,30 @@
 {
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
-	"FriendlyName": "PortalsPlugin",
-	"Description": "",
-	"Category": "Other",
-	"CreatedBy": "Dmitriy Barannik aka redbox",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"Installed": false,
-	"Modules": [
-		{
-			"Name": "PortalsPlugin",
-			"Type": "Developer",
-			"LoadingPhase": "Default"
-		}
-	]
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "PortalsPlugin",
+  "Description": "Portals plugin",
+  "Category": "Other",
+  "CreatedBy": "Dmitriy Barannik aka redbox",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "EngineVersion": "4.21.0",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "Installed": true,
+  "Modules": [
+    {
+      "Name": "PortalsPlugin",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [
+        "Win64",
+        "Win32",
+        "HTML5",
+        "Android"
+      ]
+    }
+  ]
 }

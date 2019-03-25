@@ -29,10 +29,10 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		UCameraComponent* CameraPreview;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		bool bUseCaptureInterval;
 
-	UPROPERTY(EditAnywhere, meta=(Category="Capture"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
 		float CaptureInterval;
 
 	//Override PostEditChangeProperty

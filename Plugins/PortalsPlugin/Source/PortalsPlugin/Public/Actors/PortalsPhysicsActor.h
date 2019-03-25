@@ -2,9 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-class ABP_Portal_C3609834151;
-class UPrimitiveComponent;
-class AActor;
 class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UStaticMesh;
