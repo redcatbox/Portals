@@ -14,6 +14,6 @@ class UDevFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	GENERATED_BODY()
 
-	UFUNCTION(BlueprintCallable, meta=(Category="DevFunctions"))
+	UFUNCTION(BlueprintCallable, Category = DevFunctions)
 	static void DrawDebugGizmo(UObject* WorldContextObject, FVector Location, FRotator Rotation);
 };
