@@ -20,9 +20,7 @@ void AScreenActor::BeginPlay()
 	Super::BeginPlay();
 
 	if (bRenderEnabled)
-	{
 		EnableRender();
-	}
 }
 
 // Called every frame
@@ -35,18 +33,12 @@ void AScreenActor::Tick(float DeltaTime)
 		if (CheckSCCNeedsToUpdate())
 		{
 			if (bUseCaptureInterval)
-			{
 				UKismetSystemLibrary::K2_UnPauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
-			}
 			else
-			{
 				SceneCaptureComponent2D->CaptureScene();
-			}
 		}
 		else
-		{
 			UKismetSystemLibrary::K2_PauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
-		}
 	}
 }
 

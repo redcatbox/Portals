@@ -2,7 +2,6 @@
 
 #include "PortalsFunctionLibrary.h"
 
-//Convert Direction
 FVector UPortalsFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction)
 {
 	FTransform CurrentPortalTransform;
@@ -16,7 +15,6 @@ FVector UPortalsFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, A
 	return ConvertedDirection;
 }
 
-//Convert Location
 FVector UPortalsFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
 {
 	FTransform CurrentPortalTransform;
@@ -32,7 +30,6 @@ FVector UPortalsFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AA
 	return ConvertedLocation;
 }
 
-//Convert Location Mirrored
 FVector UPortalsFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
 {
 	FTransform CurrentPortalTransform;
@@ -48,7 +45,6 @@ FVector UPortalsFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPo
 	return ConvertedLocation;
 }
 
-//Convert Rotation
 FRotator UPortalsFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation)
 {
 	FRotationMatrix R(Rotation);
@@ -64,7 +60,6 @@ FRotator UPortalsFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, A
 	return ConvertedRotation;
 }
 
-//Convert Velocity
 FVector UPortalsFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity)
 {
 	float VelocitySize = Velocity.Size();
@@ -73,7 +68,6 @@ FVector UPortalsFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AA
 	return ConvertedVelocity;
 }
 
-//Check Portals Validity
 bool UPortalsFunctionLibrary::CheckPortalsValidity(AActor* CurrentPortal, AActor* TargetPortal)
 {
 	if (::IsValid(CurrentPortal) && ::IsValid(TargetPortal))
@@ -87,7 +81,6 @@ bool UPortalsFunctionLibrary::CheckPortalsValidity(AActor* CurrentPortal, AActor
 	}
 }
 
-//Get Portals Transforms
 void UPortalsFunctionLibrary::GetPortalsTransforms(AActor* CurrentPortal, AActor* TargetPortal, FTransform& CurrentPortalTransform, FTransform& TargetPortalTransform)
 {
 	if (CheckPortalsValidity(CurrentPortal, TargetPortal))
@@ -97,7 +90,6 @@ void UPortalsFunctionLibrary::GetPortalsTransforms(AActor* CurrentPortal, AActor
 	}
 }
 
-//CheckVisibilityByDistance
 bool UPortalsFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation)
 {
 	bool bVisible = false;
@@ -113,7 +105,6 @@ bool UPortalsFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObj
 	return bVisible;
 }
 
-//CheckVisibilityByDirection
 bool UPortalsFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector)
 {
 	bool bVisible = false;
@@ -122,9 +113,7 @@ bool UPortalsFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextOb
 	float Projection = FVector::DotProduct(PlayerCameraLocation - ActorLocation, ActorForwardVector);
 
 	if (Projection >= 0)
-	{
 		bVisible = true;
-	}
 
 	return bVisible;
 }

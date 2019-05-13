@@ -4,12 +4,6 @@
 
 APortalsPhysicsActor::APortalsPhysicsActor()
 {
-
-	//if(HasAnyFlags(RF_ClassDefaultObject) && (APortalsPhysicsActor::StaticClass() == GetClass()))
-	//{
-	//	APortalsPhysicsActor::__CustomDynamicClassInitialization(CastChecked<UDynamicClass>(GetClass()));
-	//}
-	//
 	//StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	//StaticMeshCopy = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshCopy"));
 	//RootComponent = StaticMesh;

@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+//https://www.froyok.fr/blog/2019-03-creating-seamless-portals-in-unreal-engine-4
 #include "PortalActor.h"
 
 APortalActor::APortalActor()
@@ -63,9 +63,7 @@ void APortalActor::Tick(float DeltaTime)
 		}
 
 		if (bUseInnerReplacement)
-		{
 			UpdateReplacementRenderParams();
-		}
 	}
 }
 
@@ -85,7 +83,6 @@ void APortalActor::AdjustValues()
 
 	BoxCollision->SetBoxExtent(BoxExtent);
 	BoxCollision->SetRelativeLocation(FVector(BoxExtent.X, 0.f, 0.f), false, nullptr, ETeleportType::None);
-
 }
 
 void APortalActor::UpdateSCC2DTransform()
@@ -119,8 +116,6 @@ void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
 
 	if (PropertyName == TEXT("Transform") || TEXT("PortalSurfaceSize") || TEXT("BoxExtent"))
-	{
 		AdjustValues();
-	}
 }
 #endif
