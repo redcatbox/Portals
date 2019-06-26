@@ -122,42 +122,28 @@ void ABaseRenderSurface::EnableRender()
 
 bool ABaseRenderSurface::CheckSCCNeedsToUpdate()
 {
-	//UE_LOG(LogTemp, Log, TEXT("Update"));
 	bool bUpdate = false;
 
 	if (WasRecentlyRendered(0.1f))
 	{
 		bool bUpdateByDistance = false;
 		bool bUpdateByDirection = false;
-		int32 SwitchState = 0;
 
 		if (bUseUpdateDistance && MaxCaptureUpdateDistance > 0)
 		{
-
 			bUpdateByDistance = UPortalsFunctionLibrary::CheckVisibilityByDistance(this, MaxCaptureUpdateDistance, GetActorLocation());
-			SwitchState = 1;
+			bUpdate = bUpdateByDistance;
 		}
 
 		if (bUseUpdateDirection)
 		{
 			bUpdateByDirection = UPortalsFunctionLibrary::CheckVisibilityByDirection(this, GetActorLocation(), GetActorForwardVector());
-			SwitchState = 2;
+			bUpdate = bUpdateByDirection;
 		}
 
 		if (bUseUpdateDistance && bUseUpdateDirection)
 		{
-			SwitchState = 3;
-		}
-
-		switch (SwitchState)
-		{
-		case 1: bUpdate = bUpdateByDistance;
-			break;
-		case 2: bUpdate = bUpdateByDirection;
-			break;
-		case 3: bUpdate = (bUpdateByDistance && bUpdateByDirection);
-			break;
-		default: bUpdate = true;
+			bUpdate = bUpdateByDistance && bUpdateByDirection;
 		}
 	}
 

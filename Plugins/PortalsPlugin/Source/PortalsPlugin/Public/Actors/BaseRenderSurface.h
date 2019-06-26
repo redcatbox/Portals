@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "Runtime/CoreUObject/Public/UObject/NoExportTypes.h"
 #include "GameFramework/Actor.h"
-#include "PortalsFunctionLibrary.h"
+#include "Objects/PortalsFunctionLibrary.h"
 #include "Kismet/KismetRenderingLibrary.h"
 #include "BaseRenderSurface.generated.h"
 

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "PortalActor.h"
+#include "Actors/PortalActor.h"
 #include "SurfaceTraceComponent.generated.h"
 
 
