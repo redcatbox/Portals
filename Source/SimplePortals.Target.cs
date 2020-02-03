@@ -8,7 +8,7 @@ public class SimplePortalsTarget : TargetRules
 	public SimplePortalsTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-
-		ExtraModuleNames.AddRange( new string[] { "SimplePortals" } );
+		DefaultBuildSettings = BuildSettingsVersion.V2;
+		ExtraModuleNames.Add("SimplePortals");
 	}
 }
