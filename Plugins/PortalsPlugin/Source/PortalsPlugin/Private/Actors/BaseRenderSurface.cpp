@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BaseRenderSurface.h"
+#include "Actors/BaseRenderSurface.h"
 
 ABaseRenderSurface::ABaseRenderSurface()
 {
@@ -56,34 +56,16 @@ ABaseRenderSurface::ABaseRenderSurface()
 	bUseUpdateDirection = true;
 }
 
-// Called when the game starts or when spawned
-void ABaseRenderSurface::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-// Called every frame
-void ABaseRenderSurface::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void ABaseRenderSurface::AdjustValues()
-{
-	RenderTargetResolution.X = FMath::TruncToInt(RenderTargetResolution.X);
-	RenderTargetResolution.Y = FMath::TruncToInt(RenderTargetResolution.Y);
-}
-
 void ABaseRenderSurface::InitSceneCapture()
 {
 	if (bRT_UseViewportSize)
 	{
-		UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
-		if (World && World->IsGameWorld())
+		if (GEngine->GameViewport->Viewport)
 		{
-			if (UGameViewportClient* ViewportClient = World->GetGameViewport())
+			const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+			if (ViewportSize.Y != 0)
 			{
-				ViewportClient->GetViewportSize(RenderTargetResolution);
+				RenderTargetResolution = ViewportSize;
 			}
 		}
 	}
@@ -152,18 +134,18 @@ bool ABaseRenderSurface::CheckSCCNeedsToUpdate()
 
 void ABaseRenderSurface::UpdateSCC2DTransform() {}
 
-// Update with changed property
 #if WITH_EDITOR
 void ABaseRenderSurface::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-
-	if (PropertyName == TEXT("StaticMeshComponent") || TEXT("MeshAsset") || TEXT("MaterialAsset")
-		|| TEXT("bRT_UseViewportSize") || TEXT("RenderTargetResolution") || TEXT("RenderTargetFormat") ||
-		TEXT("bUseUpdateDistance") || TEXT("MaxCaptureUpdateDistance") || TEXT("bUseUpdateDirection"))
+	if (PropertyName == TEXT("StaticMeshComponent")
+		|| TEXT("MeshAsset") || TEXT("MaterialAsset")
+		|| TEXT("bRT_UseViewportSize") || TEXT("RenderTargetResolution") || TEXT("RenderTargetFormat")
+		|| TEXT("bUseUpdateDistance") || TEXT("MaxCaptureUpdateDistance") || TEXT("bUseUpdateDirection"))
 	{
-		AdjustValues();
+		RenderTargetResolution.X = FMath::TruncToInt(RenderTargetResolution.X);
+		RenderTargetResolution.Y = FMath::TruncToInt(RenderTargetResolution.Y);
 		InitSceneCapture();
 	}
 }

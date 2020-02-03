@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PortalsFunctionLibrary.h"
+#include "Objects/PortalsFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 FVector UPortalsFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction)
 {

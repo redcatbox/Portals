@@ -15,21 +15,12 @@ class PORTALSPLUGIN_API ABaseRenderSurface : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ABaseRenderSurface();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditDefaultsOnly)
 		USceneComponent* DefaultSceneRoot;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SceneCapture)
 		USceneComponent* SceneSCC;
 
 	UPROPERTY(EditDefaultsOnly, Category = Mesh)
@@ -50,35 +41,32 @@ public:
 	UPROPERTY()
 		UMaterialInstanceDynamic* MID;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SceneCapture)
 		USceneCaptureComponent2D* SceneCaptureComponent2D;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bRenderEnabled;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bRT_UseViewportSize;
 
 	UPROPERTY()
 		UTextureRenderTarget2D* RenderTargetTexture;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		FVector2D RenderTargetResolution;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		TEnumAsByte<ETextureRenderTargetFormat> RenderTargetFormat;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bUseUpdateDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		float MaxCaptureUpdateDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bUseUpdateDirection;
-
-	UFUNCTION(BlueprintCallable)
-		virtual void AdjustValues();
 
 	UFUNCTION(BlueprintCallable)
 		virtual void InitSceneCapture();
@@ -92,7 +80,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateSCC2DTransform();
 
-	//Override PostEditChangeProperty
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif

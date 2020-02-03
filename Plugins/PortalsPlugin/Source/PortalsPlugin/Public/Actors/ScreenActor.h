@@ -13,29 +13,24 @@ class PORTALSPLUGIN_API AScreenActor : public ABaseRenderSurface
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AScreenActor();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void AdjustValues() override;
 	virtual void EnableRender() override;
 
 	UPROPERTY(EditDefaultsOnly)
 		UCameraComponent* CameraPreview;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bUseCaptureInterval;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Capture)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		float CaptureInterval;
 
-	//Override PostEditChangeProperty
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif

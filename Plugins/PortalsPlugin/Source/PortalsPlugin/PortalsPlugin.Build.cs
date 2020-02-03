@@ -17,7 +17,6 @@ public class PortalsPlugin : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				"PortalsPlugin/Private",
 				// ... add other private include paths required here ...
 			}
 			);
@@ -37,8 +36,6 @@ public class PortalsPlugin : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"Slate",
-				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

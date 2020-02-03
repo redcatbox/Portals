@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ScreenActor.h"
+#include "Actors/ScreenActor.h"
 
 AScreenActor::AScreenActor()
 {
@@ -14,16 +14,16 @@ AScreenActor::AScreenActor()
 	CaptureInterval = 1.f;
 }
 
-// Called when the game starts or when spawned
 void AScreenActor::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (bRenderEnabled)
+	{
 		EnableRender();
+	}
 }
 
-// Called every frame
 void AScreenActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -33,20 +33,19 @@ void AScreenActor::Tick(float DeltaTime)
 		if (CheckSCCNeedsToUpdate())
 		{
 			if (bUseCaptureInterval)
+			{
 				UKismetSystemLibrary::K2_UnPauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
+			}
 			else
+			{
 				SceneCaptureComponent2D->CaptureScene();
+			}
 		}
 		else
+		{
 			UKismetSystemLibrary::K2_PauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
+		}
 	}
-}
-
-void AScreenActor::AdjustValues()
-{
-	Super::AdjustValues();
-
-	CaptureInterval = FMath::Clamp(CaptureInterval, 0.001f, CaptureInterval);
 }
 
 void AScreenActor::EnableRender()
@@ -60,16 +59,14 @@ void AScreenActor::EnableRender()
 	}
 }
 
-// Update with changed property
 #if WITH_EDITOR
 void AScreenActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-
 	if (PropertyName == TEXT("bUseCaptureInterval") || TEXT("CaptureInterval"))
 	{
-		AdjustValues();
+		CaptureInterval = FMath::Clamp(CaptureInterval, 0.001f, CaptureInterval);
 		InitSceneCapture();
 	}
 }

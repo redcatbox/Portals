@@ -9,7 +9,7 @@
 #include "SurfaceTraceComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PORTALSPLUGIN_API USurfaceTraceComponent : public UActorComponent
 {
 	GENERATED_BODY()

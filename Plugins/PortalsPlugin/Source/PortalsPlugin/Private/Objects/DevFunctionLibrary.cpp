@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "DevFunctionLibrary.h"
+#include "Objects/DevFunctionLibrary.h"
 
 void UDevFunctionLibrary::DrawDebugGizmo(UObject* WorldContextObject, FVector Location, FRotator Rotation)
 {

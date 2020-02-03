@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-//https://www.froyok.fr/blog/2019-03-creating-seamless-portals-in-unreal-engine-4
-#include "PortalActor.h"
+
+#include "Actors/PortalActor.h"
 
 APortalActor::APortalActor()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
@@ -36,7 +35,6 @@ APortalActor::APortalActor()
 	DestinationPoint = FVector(0.f, 0.f, 0.f);
 }
 
-// Called when the game starts or when spawned
 void APortalActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -49,7 +47,6 @@ void APortalActor::BeginPlay()
 	}
 }
 
-// Called every frame
 void APortalActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -65,24 +62,6 @@ void APortalActor::Tick(float DeltaTime)
 		if (bUseInnerReplacement)
 			UpdateReplacementRenderParams();
 	}
-}
-
-void APortalActor::AdjustValues()
-{
-	PortalSurfaceSize = FVector(
-		FMath::Clamp(PortalSurfaceSize.X, 0.f, PortalSurfaceSize.X),
-		FMath::Clamp(PortalSurfaceSize.Y, 0.f, PortalSurfaceSize.Y),
-		FMath::Clamp(PortalSurfaceSize.Z, 0.f, PortalSurfaceSize.Z));
-
-	StaticMeshComponent->SetRelativeScale3D(PortalSurfaceSize);
-
-	BoxExtent = FVector(
-		FMath::Clamp(BoxExtent.X, 0.f, BoxExtent.X),
-		FMath::Clamp(BoxExtent.Y, 0.f, BoxExtent.Y),
-		FMath::Clamp(BoxExtent.Z, 0.f, BoxExtent.Z));
-
-	BoxCollision->SetBoxExtent(BoxExtent);
-	BoxCollision->SetRelativeLocation(FVector(BoxExtent.X, 0.f, 0.f), false, nullptr, ETeleportType::None);
 }
 
 void APortalActor::UpdateSCC2DTransform()
@@ -108,14 +87,27 @@ void APortalActor::UpdateReplacementRenderParams() {}
 
 void APortalActor::UpdateArrowPointer() {}
 
-// Update with changed property
 #if WITH_EDITOR
 void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-
 	if (PropertyName == TEXT("Transform") || TEXT("PortalSurfaceSize") || TEXT("BoxExtent"))
-		AdjustValues();
+	{
+		PortalSurfaceSize = FVector(
+			FMath::Clamp(PortalSurfaceSize.X, 0.f, PortalSurfaceSize.X),
+			FMath::Clamp(PortalSurfaceSize.Y, 0.f, PortalSurfaceSize.Y),
+			FMath::Clamp(PortalSurfaceSize.Z, 0.f, PortalSurfaceSize.Z));
+
+		StaticMeshComponent->SetRelativeScale3D(PortalSurfaceSize);
+
+		BoxExtent = FVector(
+			FMath::Clamp(BoxExtent.X, 0.f, BoxExtent.X),
+			FMath::Clamp(BoxExtent.Y, 0.f, BoxExtent.Y),
+			FMath::Clamp(BoxExtent.Z, 0.f, BoxExtent.Z));
+
+		BoxCollision->SetBoxExtent(BoxExtent);
+		BoxCollision->SetRelativeLocation(FVector(BoxExtent.X, 0.f, 0.f), false, nullptr, ETeleportType::None);
+	}
 }
 #endif

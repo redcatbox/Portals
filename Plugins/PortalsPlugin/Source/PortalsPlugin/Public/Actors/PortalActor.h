@@ -11,32 +11,28 @@ class PORTALSPLUGIN_API APortalActor : public ABaseRenderSurface
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	APortalActor();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void AdjustValues() override;
 	virtual void UpdateSCC2DTransform() override;
 
-	UPROPERTY(EditAnywhere, meta = (Category = "Portal"))
+	UPROPERTY(EditAnywhere, Category = Portal)
 		FVector PortalSurfaceSize;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Portal"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Portal)
 		bool bUseInnerReplacement;
 
-	UPROPERTY(EditDefaultsOnly, NonTransactional)
+	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = BoxCollision)
 		UBoxComponent* BoxCollision;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(Category="BoxCollision"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BoxCollision)
 		FVector BoxExtent;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, meta = (Category = "TargetPortal"))
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = TargetPortal)
 		AActor* TargetPortal;
 
 	UPROPERTY()
@@ -51,7 +47,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateArrowPointer();
 
-	//Override PostEditChangeProperty
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif

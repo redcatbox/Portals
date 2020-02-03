@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MirrorActor.h"
+#include "Actors/MirrorActor.h"
 
 AMirrorActor::AMirrorActor()
 {
@@ -17,7 +17,6 @@ AMirrorActor::AMirrorActor()
 	//Default assets
 }
 
-// Called when the game starts or when spawned
 void AMirrorActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -30,7 +29,6 @@ void AMirrorActor::BeginPlay()
 	}
 }
 
-// Called every frame
 void AMirrorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -83,7 +81,6 @@ void AMirrorActor::UpdateSCC2DTransform()
 	SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
 }
 
-// Update with changed property
 #if WITH_EDITOR
 void AMirrorActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
