@@ -15,19 +15,16 @@ class PORTALSPLUGIN_API USurfaceTraceComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	USurfaceTraceComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
-		virtual void TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int NumRicochets);
+		virtual void TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int MaxNumRicochets);
 
 	UFUNCTION()
 		virtual void TracePortal(FVector TraceStart, FVector TraceDirection, float TraceDistance);

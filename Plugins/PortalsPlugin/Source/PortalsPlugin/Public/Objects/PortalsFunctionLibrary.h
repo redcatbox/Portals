@@ -29,12 +29,6 @@ public:
 		static FVector PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static bool CheckPortalsValidity(AActor* CurrentPortal, AActor* TargetPortal);
-
-	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static void GetPortalsTransforms(AActor* CurrentPortal, AActor* TargetPortal, FTransform& CurrentPortalTransform, FTransform& TargetPortalTransform);
-
-	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
 		static bool CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)

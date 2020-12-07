@@ -4,7 +4,6 @@
 
 AScreenActor::AScreenActor()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	CameraPreview = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
@@ -63,7 +62,7 @@ void AScreenActor::EnableRender()
 void AScreenActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
-	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
+	const FName PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
 	if (PropertyName == TEXT("bUseCaptureInterval") || TEXT("CaptureInterval"))
 	{
 		CaptureInterval = FMath::Clamp(CaptureInterval, 0.001f, CaptureInterval);

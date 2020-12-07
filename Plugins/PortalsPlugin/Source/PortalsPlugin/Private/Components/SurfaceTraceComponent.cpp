@@ -22,21 +22,22 @@ void USurfaceTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void USurfaceTraceComponent::TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int NumRicochets)
+void USurfaceTraceComponent::TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int MaxNumRicochets)
 {
 	TraceDirection = TraceDirection.GetSafeNormal();
-	FVector TraceEnd = TraceStart + TraceDirection * TraceDistance;
+	const FVector TraceEnd = TraceStart + TraceDirection * TraceDistance;
 
-	for (int32 i = 0; i < NumRicochets; i++)
+	for (int32 i = 0; i < MaxNumRicochets; i++)
 	{
 		FHitResult OutHit;
 		TArray<AActor*> ActorsToIgnore;
-		bool bHit = UKismetSystemLibrary::LineTraceSingle(this, TraceStart, TraceEnd, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
+		const bool bHit = UKismetSystemLibrary::LineTraceSingle(this, TraceStart, TraceEnd, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 
 		if (bHit)
 		{
-
+			
 		}
+
 		//Trace
 		//FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
 		//TraceParams.bTraceAsyncScene = true;
@@ -54,6 +55,16 @@ void USurfaceTraceComponent::TraceLoop(FVector TraceStart, FVector TraceDirectio
 	}
 }
 
-void USurfaceTraceComponent::TracePortal(FVector TraceStart, FVector TraceDirection, float TraceDistance) {}
+void USurfaceTraceComponent::TracePortal(FVector TraceStart, FVector TraceDirection, float TraceDistance)
+{
 
-void USurfaceTraceComponent::TracePortalRecursive(APortalActor* PortalActor, FVector PreviousTraceDirection, float TraceDistance, FVector PreviousImpactPoint) {}
+	
+}
+
+void USurfaceTraceComponent::TracePortalRecursive(APortalActor* PortalActor, FVector PreviousTraceDirection, float TraceDistance, FVector PreviousImpactPoint)
+{
+	APortalActor* NewPortalActor = nullptr;
+	FVector NewTraceDirection;
+	FVector NewImpactPoint;
+	TracePortalRecursive(NewPortalActor, NewTraceDirection, TraceDistance, NewImpactPoint);
+}

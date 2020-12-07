@@ -7,7 +7,7 @@ APortalActor::APortalActor()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
-	PortalSurfaceSize = FVector(1.f, 200.f, 200.f);
+	PortalSurfaceSize = FVector(1.f, 100.f, 100.f);
 	bUseInnerReplacement = false;
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
@@ -32,7 +32,7 @@ APortalActor::APortalActor()
 	ArrowComponent->ArrowColor = FColor(255, 0, 255, 255);
 	ArrowComponent->bVisualizeComponent = true;
 
-	DestinationPoint = FVector(0.f, 0.f, 0.f);
+	DestinationPoint = FVector::ZeroVector;
 }
 
 void APortalActor::BeginPlay()
@@ -91,7 +91,7 @@ void APortalActor::UpdateArrowPointer() {}
 void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
-	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
+	const FName PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
 	if (PropertyName == TEXT("Transform") || TEXT("PortalSurfaceSize") || TEXT("BoxExtent"))
 	{
 		PortalSurfaceSize = FVector(
