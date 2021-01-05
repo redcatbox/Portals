@@ -4,7 +4,6 @@
 
 ABaseRenderSurface::ABaseRenderSurface()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	//PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
@@ -29,30 +28,30 @@ ABaseRenderSurface::ABaseRenderSurface()
 	SceneCaptureComponent2D->bAutoActivate = false;
 
 	//Default assets
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("/PortalsPlugin/Dev/Meshes/SM_1UnitPlane.SM_1UnitPlane"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Screens/M_ScreenBase.M_ScreenBase"));
-	DefaultMesh = MeshObj.Object;
-	DefaultMaterial = MaterialObj.Object;
-	MeshAsset = DefaultMesh;
-	MaterialAsset = DefaultMaterial;
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("/PortalsPlugin/Dev/Meshes/SM_1UnitPlane.SM_1UnitPlane"));
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Screens/M_ScreenBase.M_ScreenBase"));
+	//DefaultMesh = MeshObj.Object;
+	//DefaultMaterial = MaterialObj.Object;
+	//MeshAsset = DefaultMesh;
+	//MaterialAsset = DefaultMaterial;
 	//Default assets
 
+	// Static mesh component
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
-	StaticMeshComponent->SetStaticMesh(DefaultMesh);
-	StaticMeshComponent->SetMaterial(0, DefaultMaterial);
-	//StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 100.f, 100.f));
+	
 
 	bRenderEnabled = true;
 	bRT_UseViewportSize = false;
 	RenderTargetTexture = nullptr;
-	RenderTargetResolution = FVector2D(256.f, 256.f);
+	RenderTargetResolution = FVector2D(128.f);
 	RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 
-	MID = nullptr;
+	// Dynamic material instance
+	RenderTargetParameterName = FName(TEXT("TextureRT"));
 
 	bUseUpdateDistance = true;
-	MaxCaptureUpdateDistance = 5000.f;
+	MaxCaptureUpdateDistance = 1000.f;
 	bUseUpdateDirection = true;
 }
 
@@ -60,9 +59,10 @@ void ABaseRenderSurface::InitSceneCapture()
 {
 	if (bRT_UseViewportSize)
 	{
-		if (GEngine->GameViewport->Viewport)
+		FViewport* Viewport = GEngine->GameViewport->Viewport;
+		if (Viewport)
 		{
-			const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+			const FVector2D ViewportSize = FVector2D(Viewport->GetSizeXY());
 			if (ViewportSize.Y != 0)
 			{
 				RenderTargetResolution = ViewportSize;
@@ -73,33 +73,34 @@ void ABaseRenderSurface::InitSceneCapture()
 	RenderTargetTexture = UKismetRenderingLibrary::CreateRenderTarget2D(this, RenderTargetResolution.X, RenderTargetResolution.Y, RenderTargetFormat);
 	SceneCaptureComponent2D->TextureTarget = RenderTargetTexture;
 
-	if (::IsValid(MeshAsset))
+	if (StaticMeshComponent->GetStaticMesh())
 	{
-		StaticMeshComponent->SetStaticMesh(MeshAsset);
+		for (int32 i = 0; i < StaticMeshComponent->GetNumMaterials(); ++i)
+		{
+			UMaterialInterface* Material = StaticMeshComponent->GetStaticMesh()->GetMaterial(i);
+			UMaterialInstanceDynamic* MID = StaticMeshComponent->CreateDynamicMaterialInstance(i, Material);
+			MID->SetTextureParameterValue(TEXT("TextureRT"), RenderTargetTexture);
+			MIDs.Add(MID);
+		}
 	}
 	else
 	{
-		MeshAsset = DefaultMesh;
-		StaticMeshComponent->SetStaticMesh(DefaultMesh);
-	}
-
-	if (::IsValid(MaterialAsset))
-	{
-		MID = StaticMeshComponent->CreateDynamicMaterialInstance(0, MaterialAsset);
-		MID->UMaterialInstanceDynamic::SetTextureParameterValue(TEXT("TextureRT"), RenderTargetTexture);
-		MID->SetScalarParameterValue(TEXT("Param"), 0.f);
-	}
-	else
-	{
-		StaticMeshComponent->SetMaterial(0, DefaultMaterial);
-		MID = nullptr;
+		MIDs.Empty();
+		StaticMeshComponent->OverrideMaterials.Empty();
 	}
 }
 
-void ABaseRenderSurface::EnableRender()
+void ABaseRenderSurface::EnableRender(bool bEnable)
 {
-	bRenderEnabled = true;
-	InitSceneCapture();
+	if (bEnable)
+	{
+		bRenderEnabled = true;
+		InitSceneCapture();
+	}
+	else
+	{
+		bRenderEnabled = false;
+	}
 }
 
 bool ABaseRenderSurface::CheckSCCNeedsToUpdate()

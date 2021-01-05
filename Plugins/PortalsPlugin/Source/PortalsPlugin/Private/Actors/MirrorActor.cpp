@@ -11,8 +11,8 @@ AMirrorActor::AMirrorActor()
 
 	//Default assets
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Mirrors/M_MirrorBase.M_MirrorBase"));
-	DefaultMaterial = MaterialObj.Object;
-	MaterialAsset = DefaultMaterial;
+	//DefaultMaterial = MaterialObj.Object;
+	//MaterialAsset = DefaultMaterial;
 	//Default assets
 }
 
@@ -22,7 +22,7 @@ void AMirrorActor::BeginPlay()
 
 	if (bRenderEnabled)
 	{
-		EnableRender();
+		EnableRender(bRenderEnabled);
 		APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
 		AddTickPrerequisiteActor(PlayerCameraManager);
 	}

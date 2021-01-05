@@ -20,7 +20,7 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-	virtual void EnableRender() override;
+	virtual void EnableRender(bool bEnable) override;
 
 	UPROPERTY(EditDefaultsOnly)
 		UCameraComponent* CameraPreview;

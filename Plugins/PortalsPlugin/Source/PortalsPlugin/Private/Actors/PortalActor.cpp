@@ -20,8 +20,8 @@ APortalActor::APortalActor()
 
 	//Default assets
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Portals/M_PortalBase.M_PortalBase"));
-	DefaultMaterial = MaterialObj.Object;
-	MaterialAsset = DefaultMaterial;
+	//DefaultMaterial = MaterialObj.Object;
+	//MaterialAsset = DefaultMaterial;
 	//Default assets
 
 	TargetPortal = nullptr;
@@ -41,7 +41,7 @@ void APortalActor::BeginPlay()
 
 	if (bRenderEnabled)
 	{
-		EnableRender();
+		EnableRender(bRenderEnabled);
 		APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
 		AddTickPrerequisiteActor(PlayerCameraManager);
 	}

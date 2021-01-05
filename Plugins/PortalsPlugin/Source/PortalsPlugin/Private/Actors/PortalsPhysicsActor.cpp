@@ -2,10 +2,6 @@
 
 #include "Actors/PortalsPhysicsActor.h"
 
-FName APortalsPhysicsActor::MIParamNameUseClipPlane(TEXT("UseClipPlane"));
-FName APortalsPhysicsActor::MIParamNameClipPlaneBase(TEXT("ClipPlaneBase"));
-FName APortalsPhysicsActor::MIParamNameClipPlaneNormal(TEXT("ClipPlaneNormal"));
-
 APortalsPhysicsActor::APortalsPhysicsActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,6 +20,11 @@ APortalsPhysicsActor::APortalsPhysicsActor()
 	TeleportationVelocityAfter = FVector::ZeroVector;
 	bIsHeld = false;
 	ProjectedDistance = 0.f;
+
+	// MI params names
+	MIParamNameUseClipPlane = FName(TEXT("UseClipPlane"));
+	MIParamNameClipPlaneBase = FName(TEXT("ClipPlaneBase"));
+	MIParamNameClipPlaneNormal = FName(TEXT("ClipPlaneNormal"));
 }
 
 void APortalsPhysicsActor::PostInitializeComponents()

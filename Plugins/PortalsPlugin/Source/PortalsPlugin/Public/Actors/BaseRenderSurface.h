@@ -26,20 +26,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Mesh)
 		UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditAnywhere, Category = Mesh)
-		UStaticMesh* MeshAsset;
-
-	UPROPERTY(EditAnywhere, Category = Mesh)
-		UMaterialInterface* MaterialAsset;
-
+	UPROPERTY(EditAnywhere, Category = MID)
+		FName RenderTargetParameterName;
+	
 	UPROPERTY()
-		UStaticMesh* DefaultMesh;
-
-	UPROPERTY()
-		UMaterialInterface* DefaultMaterial;
-
-	UPROPERTY()
-		UMaterialInstanceDynamic* MID;
+		TArray<UMaterialInstanceDynamic*> MIDs;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SceneCapture)
 		USceneCaptureComponent2D* SceneCaptureComponent2D;
@@ -72,7 +63,7 @@ public:
 		virtual void InitSceneCapture();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void EnableRender();
+		virtual void EnableRender(bool bEnable);
 
 	UFUNCTION(BlueprintCallable)
 		virtual bool CheckSCCNeedsToUpdate();

@@ -17,18 +17,18 @@ class PORTALSPLUGIN_API USurfaceTraceComponent : public UActorComponent
 public:
 	USurfaceTraceComponent();
 
-protected:
-	virtual void BeginPlay() override;
+//protected:
+//	virtual void BeginPlay() override;
 
 public:
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION()
-		virtual void TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int MaxNumRicochets);
+	UFUNCTION(BlueprintCallable, Category = SurfaceTracing)
+		virtual void TraceLoop(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets);
 
-	UFUNCTION()
-		virtual void TracePortal(FVector TraceStart, FVector TraceDirection, float TraceDistance);
+	UFUNCTION(BlueprintCallable, Category = SurfaceTracing)
+		virtual void TracePortal(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance);
 
-	UFUNCTION()
-		virtual void TracePortalRecursive(APortalActor* PortalActor, FVector PreviousTraceDirection, float TraceDistance, FVector PreviousImpactPoint);
+	UFUNCTION(BlueprintCallable, Category = SurfaceTracing)
+		virtual void TracePortalRecursive(APortalActor* PortalActor, FVector PreviousTraceDirection, float MaxTraceDistance, FVector PreviousImpactPoint);
 };

@@ -30,9 +30,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Teleportation)
 		virtual void Teleportation();
 
-	static FName MIParamNameUseClipPlane;
-	static FName MIParamNameClipPlaneBase;
-	static FName MIParamNameClipPlaneNormal;
+
+	UPROPERTY(EditAnywhere, Category = MIParams)
+		FName MIParamNameUseClipPlane;
+
+	UPROPERTY(EditAnywhere, Category = MIParams)
+		FName MIParamNameClipPlaneBase;
+
+	UPROPERTY(EditAnywhere, Category = MIParams)
+		FName MIParamNameClipPlaneNormal;
 
 protected:
 	virtual void BeginPlay() override;

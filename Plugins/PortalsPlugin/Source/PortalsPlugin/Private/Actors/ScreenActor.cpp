@@ -19,7 +19,7 @@ void AScreenActor::BeginPlay()
 
 	if (bRenderEnabled)
 	{
-		EnableRender();
+		EnableRender(bRenderEnabled);
 	}
 }
 
@@ -47,9 +47,9 @@ void AScreenActor::Tick(float DeltaTime)
 	}
 }
 
-void AScreenActor::EnableRender()
+void AScreenActor::EnableRender(bool bEnable)
 {
-	Super::EnableRender();
+	Super::EnableRender(bEnable);
 
 	if (bUseCaptureInterval)
 	{

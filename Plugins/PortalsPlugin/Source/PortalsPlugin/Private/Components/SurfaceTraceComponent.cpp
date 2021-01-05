@@ -2,69 +2,58 @@
 
 #include "Components/SurfaceTraceComponent.h"
 
-// Sets default values for this component's properties
 USurfaceTraceComponent::USurfaceTraceComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-// Called when the game starts
-void USurfaceTraceComponent::BeginPlay()
+void USurfaceTraceComponent::TraceLoop(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets)
 {
-	Super::BeginPlay();	
-}
+	FVector Start = TraceStart;
+	FVector Direction = TraceDirection.GetSafeNormal();
+	float Distance = MaxTraceDistance;
+	FVector End = Start + Direction * Distance;
 
-// Called every frame
-void USurfaceTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
-void USurfaceTraceComponent::TraceLoop(FVector TraceStart, FVector TraceDirection, float TraceDistance, int MaxNumRicochets)
-{
-	TraceDirection = TraceDirection.GetSafeNormal();
-	const FVector TraceEnd = TraceStart + TraceDirection * TraceDistance;
-
-	for (int32 i = 0; i < MaxNumRicochets; i++)
+	for (int32 i = 0; i < MaxNumRicochets; ++i)
 	{
 		FHitResult OutHit;
 		TArray<AActor*> ActorsToIgnore;
-		const bool bHit = UKismetSystemLibrary::LineTraceSingle(this, TraceStart, TraceEnd, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
+
+		const bool bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 1.f);
 
 		if (bHit)
 		{
-			
+			Distance -= (Start - OutHit.ImpactPoint).Size();
+			Start = OutHit.ImpactPoint;
+			Direction = OutHit.ImpactNormal;
+			End = Start + Direction * Distance;
 		}
-
-		//Trace
-		//FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), true, this);
-		//TraceParams.bTraceAsyncScene = true;
-		//TraceParams.bReturnPhysicalMaterial = false;
-		//FHitResult TraceOutHit(ForceInit);
-		//FVector TraceStart = GetActorTransform().TransformPosition(Location);
-		//FVector TraceEnd = TraceStart - (GetActorUpVector()) * BoxExtent.Z * 1.1;
-		//bool bHit = GetWorld()->LineTraceSingleByChannel(
-		//	TraceOutHit,
-		//	TraceStart,
-		//	TraceEnd,
-		//	ECC_Visibility,
-		//	TraceParams
-		//);
+		else
+		{
+			break;
+		}
 	}
 }
 
-void USurfaceTraceComponent::TracePortal(FVector TraceStart, FVector TraceDirection, float TraceDistance)
+void USurfaceTraceComponent::TracePortal(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance)
 {
+	FVector Start = TraceStart;
+	FVector Direction = TraceDirection.GetSafeNormal();
+	float Distance = MaxTraceDistance;
+	FVector End = Start + Direction * Distance;
 
-	
+
 }
 
-void USurfaceTraceComponent::TracePortalRecursive(APortalActor* PortalActor, FVector PreviousTraceDirection, float TraceDistance, FVector PreviousImpactPoint)
+void USurfaceTraceComponent::TracePortalRecursive(APortalActor* PortalActor, FVector TraceDirection, float MaxTraceDistance, FVector ImpactPoint)
 {
 	APortalActor* NewPortalActor = nullptr;
 	FVector NewTraceDirection;
 	FVector NewImpactPoint;
-	TracePortalRecursive(NewPortalActor, NewTraceDirection, TraceDistance, NewImpactPoint);
+
+	FVector Start = NewImpactPoint;
+	FVector Direction = TraceDirection.GetSafeNormal();
+	float Distance = MaxTraceDistance;
+	FVector End = Start + Direction * Distance;
+	TracePortalRecursive(NewPortalActor, NewTraceDirection, Distance, NewImpactPoint);
 }
