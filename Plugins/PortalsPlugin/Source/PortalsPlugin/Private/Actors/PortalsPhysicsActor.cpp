@@ -21,7 +21,7 @@ APortalsPhysicsActor::APortalsPhysicsActor()
 	bIsHeld = false;
 	ProjectedDistance = 0.f;
 
-	// MI params names
+	// Dynamic material instance
 	MIParamNameUseClipPlane = FName(TEXT("UseClipPlane"));
 	MIParamNameClipPlaneBase = FName(TEXT("ClipPlaneBase"));
 	MIParamNameClipPlaneNormal = FName(TEXT("ClipPlaneNormal"));

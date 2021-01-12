@@ -55,5 +55,12 @@ void USurfaceTraceComponent::TracePortalRecursive(APortalActor* PortalActor, FVe
 	FVector Direction = TraceDirection.GetSafeNormal();
 	float Distance = MaxTraceDistance;
 	FVector End = Start + Direction * Distance;
-	TracePortalRecursive(NewPortalActor, NewTraceDirection, Distance, NewImpactPoint);
+
+	FHitResult OutHit;
+	TArray<AActor*> ActorsToIgnore;
+	const bool bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 1.f);
+	if (bHit)
+	{
+		TracePortalRecursive(NewPortalActor, NewTraceDirection, Distance, NewImpactPoint);
+	}
 }

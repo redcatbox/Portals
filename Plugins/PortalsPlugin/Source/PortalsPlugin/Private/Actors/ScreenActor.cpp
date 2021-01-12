@@ -33,7 +33,7 @@ void AScreenActor::Tick(float DeltaTime)
 		{
 			if (bUseCaptureInterval)
 			{
-				UKismetSystemLibrary::K2_UnPauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
+				GetWorldTimerManager().UnPauseTimer(TH_CaptureScene);
 			}
 			else
 			{
@@ -42,7 +42,7 @@ void AScreenActor::Tick(float DeltaTime)
 		}
 		else
 		{
-			UKismetSystemLibrary::K2_PauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
+			GetWorldTimerManager().PauseTimer(TH_CaptureScene);
 		}
 	}
 }
@@ -51,10 +51,12 @@ void AScreenActor::EnableRender(bool bEnable)
 {
 	Super::EnableRender(bEnable);
 
-	if (bUseCaptureInterval)
+	if (bEnable && bUseCaptureInterval)
 	{
-		UKismetSystemLibrary::K2_SetTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")), CaptureInterval, true);
-		UKismetSystemLibrary::K2_PauseTimer(SceneCaptureComponent2D, FString(TEXT("CaptureScene")));
+		FTimerDelegate TD_CaptureScene;
+		TD_CaptureScene.BindUFunction(SceneCaptureComponent2D, FName("CaptureScene"));
+		GetWorldTimerManager().SetTimer(TH_CaptureScene, TD_CaptureScene, CaptureInterval, true);
+		GetWorldTimerManager().PauseTimer(TH_CaptureScene);
 	}
 }
 
@@ -66,7 +68,6 @@ void AScreenActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 	if (PropertyName == TEXT("bUseCaptureInterval") || TEXT("CaptureInterval"))
 	{
 		CaptureInterval = FMath::Clamp(CaptureInterval, 0.001f, CaptureInterval);
-		InitSceneCapture();
 	}
 }
 #endif

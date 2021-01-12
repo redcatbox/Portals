@@ -4,7 +4,6 @@
 
 #include "BaseRenderSurface.h"
 #include "Camera/CameraComponent.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "ScreenActor.generated.h"
 
 UCLASS()
@@ -30,6 +29,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		float CaptureInterval;
+
+protected:
+	UPROPERTY()
+		FTimerHandle TH_CaptureScene;
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

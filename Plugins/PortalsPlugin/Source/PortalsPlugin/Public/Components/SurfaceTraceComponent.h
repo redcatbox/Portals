@@ -17,12 +17,6 @@ class PORTALSPLUGIN_API USurfaceTraceComponent : public UActorComponent
 public:
 	USurfaceTraceComponent();
 
-//protected:
-//	virtual void BeginPlay() override;
-
-public:
-	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	UFUNCTION(BlueprintCallable, Category = SurfaceTracing)
 		virtual void TraceLoop(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets);
 

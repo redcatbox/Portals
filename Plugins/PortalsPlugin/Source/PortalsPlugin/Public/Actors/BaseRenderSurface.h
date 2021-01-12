@@ -20,32 +20,36 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		USceneComponent* DefaultSceneRoot;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SceneCapture)
-		USceneComponent* SceneSCC;
-
-	UPROPERTY(EditDefaultsOnly, Category = Mesh)
+	UPROPERTY(EditDefaultsOnly)
 		UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(EditAnywhere, Category = MID)
 		FName RenderTargetParameterName;
-	
-	UPROPERTY()
-		TArray<UMaterialInstanceDynamic*> MIDs;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = SceneCapture)
+protected:
+	UPROPERTY()
+		UMaterialInstanceDynamic* MID;
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = SceneCapture)
+		USceneComponent* SceneCaptureRoot;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = SceneCapture)
 		USceneCaptureComponent2D* SceneCaptureComponent2D;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bRenderEnabled;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bRT_UseViewportSize;
+		bool bRenderTargetEqualsViewportSize;
 
+protected:
 	UPROPERTY()
 		UTextureRenderTarget2D* RenderTargetTexture;
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		FVector2D RenderTargetResolution;
+		FIntPoint RenderTargetResolution;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		TEnumAsByte<ETextureRenderTargetFormat> RenderTargetFormat;
@@ -59,10 +63,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 		bool bUseUpdateDirection;
 
-	UFUNCTION(BlueprintCallable)
-		virtual void InitSceneCapture();
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = SceneCapture)
 		virtual void EnableRender(bool bEnable);
 
 	UFUNCTION(BlueprintCallable)
@@ -71,7 +72,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void UpdateSCC2DTransform();
 
-#if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-#endif
+//#if WITH_EDITOR
+//	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+//#endif
 };
