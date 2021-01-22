@@ -22,17 +22,17 @@ public:
 	virtual void EnableRender(bool bEnable) override;
 
 	UPROPERTY(EditDefaultsOnly)
-		UCameraComponent* CameraPreview;
+	UCameraComponent* CameraPreview;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bUseCaptureInterval;
+	bool bUseCaptureInterval;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		float CaptureInterval;
+	float CaptureInterval;
 
 protected:
 	UPROPERTY()
-		FTimerHandle TH_CaptureScene;
+	FTimerHandle TH_CaptureScene;
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

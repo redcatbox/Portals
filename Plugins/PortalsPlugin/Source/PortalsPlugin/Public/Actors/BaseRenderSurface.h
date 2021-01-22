@@ -18,59 +18,59 @@ public:
 	ABaseRenderSurface();
 
 	UPROPERTY(EditDefaultsOnly)
-		USceneComponent* DefaultSceneRoot;
+	USceneComponent* DefaultSceneRoot;
 
 	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* StaticMeshComponent;
+	UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(EditAnywhere, Category = MID)
-		FName RenderTargetParameterName;
+	FName RenderTargetParameterName;
 
 protected:
 	UPROPERTY()
-		UMaterialInstanceDynamic* MID;
+	UMaterialInstanceDynamic* MID;
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = SceneCapture)
-		USceneComponent* SceneCaptureRoot;
+	USceneComponent* SceneCaptureRoot;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = SceneCapture)
-		USceneCaptureComponent2D* SceneCaptureComponent2D;
+	USceneCaptureComponent2D* SceneCaptureComponent2D;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bRenderEnabled;
+	bool bRenderEnabled;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bRenderTargetEqualsViewportSize;
+	bool bRenderTargetEqualsViewportSize;
 
 protected:
 	UPROPERTY()
-		UTextureRenderTarget2D* RenderTargetTexture;
+	UTextureRenderTarget2D* RenderTargetTexture;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		FIntPoint RenderTargetResolution;
+	FIntPoint RenderTargetResolution;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		TEnumAsByte<ETextureRenderTargetFormat> RenderTargetFormat;
+	TEnumAsByte<ETextureRenderTargetFormat> RenderTargetFormat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bUseUpdateDistance;
+	bool bUseUpdateDistance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		float MaxCaptureUpdateDistance;
+	float MaxCaptureUpdateDistance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
-		bool bUseUpdateDirection;
+	bool bUseUpdateDirection;
 
 	UFUNCTION(BlueprintCallable, Category = SceneCapture)
-		virtual void EnableRender(bool bEnable);
+	virtual void EnableRender(bool bEnable);
 
 	UFUNCTION(BlueprintCallable)
-		virtual bool CheckSCCNeedsToUpdate();
+	virtual bool CheckSCCNeedsToUpdate();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void UpdateSCC2DTransform();
+	virtual void UpdateSCC2DTransform();
 
 //#if WITH_EDITOR
 //	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

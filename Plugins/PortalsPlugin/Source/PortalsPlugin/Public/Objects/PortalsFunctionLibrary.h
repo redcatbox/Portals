@@ -14,23 +14,23 @@ class PORTALSPLUGIN_API UPortalsFunctionLibrary : public UBlueprintFunctionLibra
 
 public:
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static FVector PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction);
+	static FVector PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static FVector PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
+	static FVector PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static FVector PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
+	static FVector PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static FRotator PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation);
+	static FRotator PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static FVector PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity);
+	static FVector PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static bool CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation);
+	static bool CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-		static bool CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector);
+	static bool CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector);
 };

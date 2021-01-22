@@ -21,31 +21,31 @@ public:
 	virtual void UpdateSCC2DTransform() override;
 
 	UPROPERTY(EditAnywhere, Category = Portal)
-		FVector PortalSurfaceSize;
+	FVector PortalSurfaceSize;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Portal)
-		bool bUseInnerReplacement;
+	bool bUseInnerReplacement;
 
 	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = BoxCollision)
-		UBoxComponent* BoxCollision;
+	UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BoxCollision)
-		FVector BoxExtent;
+	FVector BoxExtent;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = TargetPortal)
-		AActor* TargetPortal;
+	AActor* TargetPortal;
 
 	UPROPERTY()
-		UArrowComponent* ArrowComponent;
+	UArrowComponent* ArrowComponent;
 
 	UPROPERTY(BlueprintReadWrite)
-		FVector DestinationPoint;
+	FVector DestinationPoint;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void UpdateReplacementRenderParams();
+	virtual void UpdateReplacementRenderParams();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void UpdateArrowPointer();
+	virtual void UpdateArrowPointer();
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

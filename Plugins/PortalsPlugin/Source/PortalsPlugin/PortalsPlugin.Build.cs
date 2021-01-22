@@ -36,6 +36,7 @@ public class PortalsPlugin : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
+				"PhysicsCore"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

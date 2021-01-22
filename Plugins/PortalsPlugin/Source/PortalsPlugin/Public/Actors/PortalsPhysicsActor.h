@@ -22,48 +22,48 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = Teleportation)
-		virtual void UpdateComponentsTransforms();
+	virtual void UpdateComponentsTransforms();
 
 	UFUNCTION(BlueprintCallable, Category = Teleportation)
-		virtual void TeleportationVisualization();
+	virtual void TeleportationVisualization();
 
 	UFUNCTION(BlueprintCallable, Category = Teleportation)
-		virtual void Teleportation();
+	virtual void Teleportation();
 
 
 	UPROPERTY(EditAnywhere, Category = MIParams)
-		FName MIParamNameUseClipPlane;
+	FName MIParamNameUseClipPlane;
 
 	UPROPERTY(EditAnywhere, Category = MIParams)
-		FName MIParamNameClipPlaneBase;
+	FName MIParamNameClipPlaneBase;
 
 	UPROPERTY(EditAnywhere, Category = MIParams)
-		FName MIParamNameClipPlaneNormal;
+	FName MIParamNameClipPlaneNormal;
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY()
-		UStaticMeshComponent* StaticMeshComponentCopy;
+	UStaticMeshComponent* StaticMeshComponentCopy;
 
 	UPROPERTY()
-		TArray<UMaterialInstanceDynamic*> MIDs;
+	TArray<UMaterialInstanceDynamic*> MIDs;
 
 	UPROPERTY()
-		TArray<UMaterialInstanceDynamic*> MIDsCopy;
+	TArray<UMaterialInstanceDynamic*> MIDsCopy;
 
 	UPROPERTY()
-		APortalActor* OverlappingPortal;
+	APortalActor* OverlappingPortal;
 
 	UPROPERTY()
-		FVector TeleportationVelocityBefore;
+	FVector TeleportationVelocityBefore;
 
 	UPROPERTY()
-		FVector TeleportationVelocityAfter;
+	FVector TeleportationVelocityAfter;
 
 	UPROPERTY()
-		bool bIsHeld;
+	bool bIsHeld;
 
 	UPROPERTY()
-		float ProjectedDistance;
+	float ProjectedDistance;
 };
