@@ -20,9 +20,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void UpdateSCC2DTransform() override;
 
-	UPROPERTY(EditAnywhere, Category = Portal)
-	FVector PortalSurfaceSize;
-
+	UPROPERTY()
+	UArrowComponent* ArrowComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Portal)
 	bool bUseInnerReplacement;
 
@@ -35,9 +35,6 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = TargetPortal)
 	AActor* TargetPortal;
 
-	UPROPERTY()
-	UArrowComponent* ArrowComponent;
-
 	UPROPERTY(BlueprintReadWrite)
 	FVector DestinationPoint;
 
@@ -49,5 +46,7 @@ public:
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	virtual void EditorApplyScale(const FVector& DeltaScale, const FVector* PivotLocation, bool bAltDown, bool bShiftDown, bool bCtrlDown) override;
+	virtual void EditorApplyMirror(const FVector& MirrorScale, const FVector& PivotLocation) override;
 #endif
 };

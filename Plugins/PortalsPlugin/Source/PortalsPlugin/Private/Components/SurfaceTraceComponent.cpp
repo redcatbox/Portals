@@ -23,7 +23,7 @@ void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector Trac
 		if (bDrawDebugInfo)
 		{
 			TArray<AActor*> ActorsToIgnore;
-			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 1.f);
+			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 		}
 		else
 		{
@@ -45,7 +45,7 @@ void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector Trac
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
 				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 1.f, 0, 5.f);
+				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
 			}
 #endif
 
@@ -102,7 +102,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
 				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 1.f, 0, 5.f);
+				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
 			}
 #endif
 
@@ -123,7 +123,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 		if (bDrawDebugInfo)
 		{
 			TArray<AActor*> ActorsToIgnore;
-			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 1.f);
+			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 		}
 		else
 		{
@@ -137,7 +137,6 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 			Distance -= OutHit.Distance;
 			Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
 			Start = OutHit.ImpactPoint + Direction;
-			NumRicochets--;
 
 #if ENABLE_DRAW_DEBUG
 			if (bDrawDebugInfo)
@@ -145,11 +144,16 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
 				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 1.f, 0, 5.f);
+				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
 			}
 #endif
 
-			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
+			APortalActor* Portal = Cast<APortalActor>(OutHit.Actor);
+			if (!Portal)
+			{
+				NumRicochets--;
+			}
+
 			TraceForPortalRecursivelyWithRicochets(Portal, Start, Direction, Distance, NumRicochets);
 		}
 	}

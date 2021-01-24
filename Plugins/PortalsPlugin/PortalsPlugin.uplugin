@@ -1,28 +1,28 @@
 {
-  "FileVersion": 3,
-  "Version": 1,
-  "VersionName": "1.0",
-  "FriendlyName": "PortalsPlugin",
-  "Description": "Simple portals",
-  "Category": "Portals",
-  "CreatedBy": "redbox",
-  "CreatedByURL": "",
-  "DocsURL": "",
-  "MarketplaceURL": "",
-  "SupportURL": "",
-  "CanContainContent": true,
-  "IsBetaVersion": false,
-  "Installed": true,
-  "Modules": [
-    {
-      "Name": "PortalsPlugin",
-      "Type": "Runtime",
-      "LoadingPhase": "Default",
-      "WhitelistPlatforms": [
-        "Win64",
-        "Win32",
-        "Android"
-      ]
-    }
-  ]
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PortalsPlugin",
+	"Description": "Simple portals",
+	"Category": "Portals",
+	"CreatedBy": "redbox",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "PortalsPlugin",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32",
+				"Android"
+			]
+		}
+	]
 }

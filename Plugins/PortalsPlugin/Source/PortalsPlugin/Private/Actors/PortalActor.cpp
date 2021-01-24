@@ -7,23 +7,22 @@ APortalActor::APortalActor()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
-	PortalSurfaceSize = FVector(1.f, 100.f, 100.f);
 	bUseInnerReplacement = false;
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxCollision->SetupAttachment(RootComponent);
 	BoxExtent = FVector(10.f, 100.f, 100.f);
 	BoxCollision->BodyInstance.SetCollisionProfileName(FName(TEXT("Custom")));
-	
+
 	SceneCaptureComponent2D->bEnableClipPlane = true;
 	//SceneCaptureComponent2D->CaptureSource = ESceneCaptureSource::SCS_SceneColorSceneDepth;
 
-	//Default assets
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Portals/M_PortalBase.M_PortalBase"));
-	//DefaultMaterial = MaterialObj.Object;
-	//MaterialAsset = DefaultMaterial;
-	//Default assets
-
+	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	StaticMeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	StaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
+	
 	TargetPortal = nullptr;
 
 	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
@@ -66,7 +65,7 @@ void APortalActor::Tick(float DeltaTime)
 
 void APortalActor::UpdateSCC2DTransform()
 {
-	if (::IsValid(TargetPortal))
+	if (TargetPortal)
 	{
 		//Update clip plane
 		SceneCaptureComponent2D->ClipPlaneBase = TargetPortal->GetActorLocation();
@@ -92,15 +91,8 @@ void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 	const FName PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-	if (PropertyName == TEXT("Transform") || TEXT("PortalSurfaceSize") || TEXT("BoxExtent"))
+	if (PropertyName == TEXT("BoxExtent"))
 	{
-		PortalSurfaceSize = FVector(
-			FMath::Clamp(PortalSurfaceSize.X, 0.f, PortalSurfaceSize.X),
-			FMath::Clamp(PortalSurfaceSize.Y, 0.f, PortalSurfaceSize.Y),
-			FMath::Clamp(PortalSurfaceSize.Z, 0.f, PortalSurfaceSize.Z));
-
-		StaticMeshComponent->SetRelativeScale3D(PortalSurfaceSize);
-
 		BoxExtent = FVector(
 			FMath::Clamp(BoxExtent.X, 0.f, BoxExtent.X),
 			FMath::Clamp(BoxExtent.Y, 0.f, BoxExtent.Y),
@@ -109,5 +101,30 @@ void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 		BoxCollision->SetBoxExtent(BoxExtent);
 		BoxCollision->SetRelativeLocation(FVector(BoxExtent.X, 0.f, 0.f), false, nullptr, ETeleportType::None);
 	}
+}
+
+void APortalActor::EditorApplyScale(const FVector& DeltaScale, const FVector* PivotLocation, bool bAltDown, bool bShiftDown, bool bCtrlDown)
+{
+	Super::EditorApplyScale(DeltaScale, PivotLocation, bAltDown, bShiftDown, bCtrlDown);
+
+	FVector ScaleToApply = StaticMeshComponent->GetRelativeScale3D();
+	if (bUsePercentageBasedScaling)
+	{
+		ScaleToApply *= FVector::OneVector + DeltaScale;
+	}
+	else
+	{
+		ScaleToApply += DeltaScale;
+	}
+
+	BoxCollision->SetBoxExtent(BoxExtent * DeltaScale);
+	BoxCollision->SetRelativeLocation(FVector(BoxExtent.X, 0.f, 0.f), false, nullptr, ETeleportType::None);
+	StaticMeshComponent->SetRelativeScale3D(ScaleToApply);
+}
+
+void APortalActor::EditorApplyMirror(const FVector& MirrorScale, const FVector& PivotLocation)
+{
+	Super::EditorApplyMirror(MirrorScale, PivotLocation);
+	SetActorScale3D(FVector::OneVector);
 }
 #endif
