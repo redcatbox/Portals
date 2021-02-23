@@ -17,12 +17,12 @@
 		{
 			"Name": "PortalsPlugin",
 			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"WhitelistPlatforms": [
-				"Win64",
-				"Win32",
-				"Android"
-			]
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PortalsPluginEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	]
 }

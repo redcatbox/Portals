@@ -5,6 +5,8 @@
 #include "BaseRenderSurface.h"
 #include "PortalActor.generated.h"
 
+class UPortalComponent;
+
 UCLASS()
 class PORTALSPLUGIN_API APortalActor : public ABaseRenderSurface
 {
@@ -20,11 +22,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void UpdateSCC2DTransform() override;
 
-	UPROPERTY()
-	UArrowComponent* ArrowComponent;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Portal)
 	bool bUseInnerReplacement;
+
+	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = Portal)
+	UPortalComponent* PortalComponent;
 
 	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = BoxCollision)
 	UBoxComponent* BoxCollision;
@@ -40,9 +42,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void UpdateReplacementRenderParams();
-
-	UFUNCTION(BlueprintCallable)
-	virtual void UpdateArrowPointer();
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

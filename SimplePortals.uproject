@@ -14,7 +14,12 @@
 		{
 			"Name": "PortalsPlugin",
 			"Enabled": true,
-			"MarketplaceURL": ""
+			"WhitelistPlatforms": [
+				"Win64"
+			],
+			"SupportedTargetPlatforms": [
+				"Win64"
+			]
 		}
 	]
 }

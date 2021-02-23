@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actors/PortalActor.h"
+#include "Components/PortalComponent.h"
 
 APortalActor::APortalActor()
 {
@@ -8,6 +9,9 @@ APortalActor::APortalActor()
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
 	bUseInnerReplacement = false;
+
+	PortalComponent = CreateDefaultSubobject<UPortalComponent>(TEXT("PortalComponent"));
+	PortalComponent->SetupAttachment(RootComponent);
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxCollision->SetupAttachment(RootComponent);
@@ -22,14 +26,8 @@ APortalActor::APortalActor()
 	StaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
-	
-	TargetPortal = nullptr;
 
-	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
-	ArrowComponent->SetupAttachment(RootComponent);
-	ArrowComponent->Mobility = EComponentMobility::Static;
-	ArrowComponent->ArrowColor = FColor(255, 0, 255, 255);
-	ArrowComponent->bVisualizeComponent = true;
+	TargetPortal = nullptr;
 
 	DestinationPoint = FVector::ZeroVector;
 }
@@ -83,8 +81,6 @@ void APortalActor::UpdateSCC2DTransform()
 }
 
 void APortalActor::UpdateReplacementRenderParams() {}
-
-void APortalActor::UpdateArrowPointer() {}
 
 #if WITH_EDITOR
 void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
