@@ -44,19 +44,15 @@ void AMirrorActor::Tick(float DeltaTime)
 
 void AMirrorActor::UpdateSCC2DTransform()
 {
-	//Update clip plane
 	FVector ActorLocation = GetActorLocation();
 	FVector ActorForwardVector = GetActorForwardVector();
 	SceneCaptureComponent2D->ClipPlaneBase = ActorLocation;
 	SceneCaptureComponent2D->ClipPlaneNormal = ActorForwardVector;
 
-	//Get player camera params
 	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
 
-	//FOV
 	SceneCaptureComponent2D->FOVAngle = PlayerCameraManager->GetFOVAngle();
 
-	//Location
 	FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
 	FTransform ActorTransform = GetActorTransform();
 	SceneCaptureLocation = ActorTransform.InverseTransformPosition(SceneCaptureLocation);
@@ -65,7 +61,6 @@ void AMirrorActor::UpdateSCC2DTransform()
 	ActorTransform.SetScale3D(Scale);
 	SceneCaptureLocation = ActorTransform.TransformPosition(SceneCaptureLocation);
 
-	//Rotation
 	FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
 	FVector X;
 	FVector Y;

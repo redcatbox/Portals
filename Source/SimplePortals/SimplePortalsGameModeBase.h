@@ -6,15 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "SimplePortalsGameModeBase.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SIMPLEPORTALS_API ASimplePortalsGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-	
-	
-	
 };

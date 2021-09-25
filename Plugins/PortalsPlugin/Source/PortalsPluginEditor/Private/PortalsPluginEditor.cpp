@@ -1,4 +1,4 @@
-// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PortalsPluginEditor.h"
 #include "UnrealEd.h"
@@ -30,7 +30,6 @@ void FPortalsPluginEditorModule::RegisterVisualizers()
 			GUnrealEd->RegisterComponentVisualizer(UPortalComponent::StaticClass()->GetFName(), Visualizer);
 			Visualizer->OnRegister();
 		}
-
 	}
 }
 
