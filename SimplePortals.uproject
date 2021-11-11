@@ -16,9 +16,6 @@
 			"Enabled": true,
 			"WhitelistPlatforms": [
 				"Win64"
-			],
-			"SupportedTargetPlatforms": [
-				"Win64"
 			]
 		}
 	]

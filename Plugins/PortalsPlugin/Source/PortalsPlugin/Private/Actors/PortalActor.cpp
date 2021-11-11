@@ -2,6 +2,7 @@
 
 #include "Actors/PortalActor.h"
 #include "Components/PortalComponent.h"
+#include "Objects/PortalFunctionLibrary.h"
 
 APortalActor::APortalActor()
 {
@@ -19,7 +20,6 @@ APortalActor::APortalActor()
 	BoxCollision->BodyInstance.SetCollisionProfileName(FName(TEXT("Custom")));
 
 	SceneCaptureComponent2D->bEnableClipPlane = true;
-	//SceneCaptureComponent2D->CaptureSource = ESceneCaptureSource::SCS_SceneColorSceneDepth;
 
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	StaticMeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
@@ -73,8 +73,8 @@ void APortalActor::UpdateSCC2DTransform()
 		FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
 		FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
 
-		SceneCaptureLocation = UPortalsFunctionLibrary::PortalConvertLocation(this, TargetPortal, SceneCaptureLocation);
-		SceneCaptureRotation = UPortalsFunctionLibrary::PortalConvertRotation(this, TargetPortal, SceneCaptureRotation);
+		SceneCaptureLocation = UPortalFunctionLibrary::PortalConvertLocation(this, TargetPortal, SceneCaptureLocation);
+		SceneCaptureRotation = UPortalFunctionLibrary::PortalConvertRotation(this, TargetPortal, SceneCaptureRotation);
 
 		SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
 	}

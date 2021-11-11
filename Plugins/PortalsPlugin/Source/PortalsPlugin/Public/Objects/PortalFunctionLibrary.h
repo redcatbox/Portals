@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "PortalsFunctionLibrary.generated.h"
+#include "PortalFunctionLibrary.generated.h"
 
 UCLASS()
-class PORTALSPLUGIN_API UPortalsFunctionLibrary : public UBlueprintFunctionLibrary
+class PORTALSPLUGIN_API UPortalFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

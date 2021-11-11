@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/SurfaceTraceComponent.h"
+#include "Components/PortalTraceComponent.h"
 #include "Actors/PortalActor.h"
-#include "Objects/PortalsFunctionLibrary.h"
+#include "Objects/PortalFunctionLibrary.h"
+
 #if ENABLE_DRAW_DEBUG
 #include "DrawDebugHelpers.h"
 #endif
 
-void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets)
+void UPortalTraceComponent::TraceRicochets(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers)
 {
 	if (MaxNumRicochets > -1)
 	{
@@ -20,14 +21,14 @@ void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector Trac
 		bool bHit;
 		FHitResult OutHit;
 
-		if (bDrawDebugInfo)
+		if (bDrawDebugHelpers)
 		{
 			TArray<AActor*> ActorsToIgnore;
 			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 		}
 		else
 		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(SurfaceTrace), true, GetOwner());
+			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
 			TraceParams.bReturnPhysicalMaterial = true;
 			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
 		}
@@ -40,7 +41,7 @@ void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector Trac
 			NumRicochets--;
 
 #if ENABLE_DRAW_DEBUG
-			if (bDrawDebugInfo)
+			if (bDrawDebugHelpers)
 			{
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
@@ -49,17 +50,17 @@ void USurfaceTraceComponent::TraceWithRicochets(FVector TraceStart, FVector Trac
 			}
 #endif
 
-			TraceWithRicochets(Start, Direction, Distance, NumRicochets);
+			TraceRicochets(Start, Direction, Distance, NumRicochets, bDrawDebugHelpers);
 		}
 	}
 }
 
-void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets)
+void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers)
 {
 	if (PortalActor && PortalActor->TargetPortal)
 	{
-		FVector Start = UPortalsFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart);
-		FVector Direction = UPortalsFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection.GetSafeNormal());
+		FVector Start = UPortalFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart);
+		FVector Direction = UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection.GetSafeNormal());
 		//Start += Direction;
 		float Distance = MaxTraceDistance;
 		FVector End = Start + Direction * Distance;
@@ -68,14 +69,14 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 		bool bHit;
 		FHitResult OutHit;
 
-		if (bDrawDebugInfo)
+		if (bDrawDebugHelpers)
 		{
 			TArray<AActor*> ActorsToIgnore;
 			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 		}
 		else
 		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(SurfaceTrace), true, GetOwner());
+			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
 			TraceParams.bReturnPhysicalMaterial = true;
 			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
 		}
@@ -87,7 +88,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
 			if (Portal)
 			{
-				Direction = UPortalsFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, Direction);
+				Direction = UPortalFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, Direction);
 			}
 			else
 			{
@@ -97,7 +98,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 			Start = OutHit.ImpactPoint + Direction;
 
 #if ENABLE_DRAW_DEBUG
-			if (bDrawDebugInfo)
+			if (bDrawDebugHelpers)
 			{
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
@@ -106,7 +107,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 			}
 #endif
 
-			TraceForPortalRecursivelyWithRicochets(Portal, Start, Direction, Distance, NumRicochets);
+			PortalRecursivelyTraceRicochets(Portal, Start, Direction, Distance, NumRicochets);
 		}
 	}
 	else if (MaxNumRicochets > -1)
@@ -120,14 +121,14 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 		bool bHit;
 		FHitResult OutHit;
 
-		if (bDrawDebugInfo)
+		if (bDrawDebugHelpers)
 		{
 			TArray<AActor*> ActorsToIgnore;
 			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
 		}
 		else
 		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(SurfaceTrace), true, GetOwner());
+			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
 			TraceParams.bReturnPhysicalMaterial = true;
 			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
 		}
@@ -139,7 +140,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 			Start = OutHit.ImpactPoint + Direction;
 
 #if ENABLE_DRAW_DEBUG
-			if (bDrawDebugInfo)
+			if (bDrawDebugHelpers)
 			{
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
@@ -154,7 +155,7 @@ void USurfaceTraceComponent::TraceForPortalRecursivelyWithRicochets(APortalActor
 				NumRicochets--;
 			}
 
-			TraceForPortalRecursivelyWithRicochets(Portal, Start, Direction, Distance, NumRicochets);
+			PortalRecursivelyTraceRicochets(Portal, Start, Direction, Distance, NumRicochets, bDrawDebugHelpers);
 		}
 	}
 }

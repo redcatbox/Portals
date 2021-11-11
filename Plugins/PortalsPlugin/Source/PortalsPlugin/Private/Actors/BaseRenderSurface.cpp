@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actors/BaseRenderSurface.h"
+#include "Objects/PortalFunctionLibrary.h"
 
 ABaseRenderSurface::ABaseRenderSurface()
 {
@@ -19,7 +20,6 @@ ABaseRenderSurface::ABaseRenderSurface()
 	// SceneCaptureComponent2D
 	SceneCaptureComponent2D = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCaptureComponent2D"));
 	SceneCaptureComponent2D->SetupAttachment(SceneCaptureRoot);
-	//SceneCaptureComponent2D->bEnableClipPlane = true;
 	SceneCaptureComponent2D->bCaptureEveryFrame = false;
 	SceneCaptureComponent2D->bCaptureOnMovement = false;
 	SceneCaptureComponent2D->bAutoActivate = false;
@@ -93,13 +93,13 @@ bool ABaseRenderSurface::CheckSCCNeedsToUpdate()
 
 		if (bUseUpdateDistance && MaxCaptureUpdateDistance > 0)
 		{
-			bUpdateByDistance = UPortalsFunctionLibrary::CheckVisibilityByDistance(this, MaxCaptureUpdateDistance, GetActorLocation());
+			bUpdateByDistance = UPortalFunctionLibrary::CheckVisibilityByDistance(this, MaxCaptureUpdateDistance, GetActorLocation());
 			bUpdate = bUpdateByDistance;
 		}
 
 		if (bUseUpdateDirection)
 		{
-			bUpdateByDirection = UPortalsFunctionLibrary::CheckVisibilityByDirection(this, GetActorLocation(), GetActorForwardVector());
+			bUpdateByDirection = UPortalFunctionLibrary::CheckVisibilityByDirection(this, GetActorLocation(), GetActorForwardVector());
 			bUpdate = bUpdateByDirection;
 		}
 

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Objects/PortalsFunctionLibrary.h"
+#include "Objects/PortalFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
-FVector UPortalsFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction)
+FVector UPortalFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector Direction)
 {
 	const FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
 	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
@@ -15,7 +15,7 @@ FVector UPortalsFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, A
 	return ConvertedDirection;
 }
 
-FVector UPortalsFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
+FVector UPortalFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
 {
 	FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
 	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
@@ -29,7 +29,7 @@ FVector UPortalsFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AA
 	return ConvertedLocation;
 }
 
-FVector UPortalsFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
+FVector UPortalFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector Location)
 {
 	FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
 	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
@@ -43,7 +43,7 @@ FVector UPortalsFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPo
 	return ConvertedLocation;
 }
 
-FRotator UPortalsFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation)
+FRotator UPortalFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator Rotation)
 {
 	FRotationMatrix R(Rotation);
 	FVector X;
@@ -58,7 +58,7 @@ FRotator UPortalsFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, A
 	return ConvertedRotation;
 }
 
-FVector UPortalsFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity)
+FVector UPortalFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector Velocity)
 {
 	const float VelocitySize = Velocity.Size();
 	const FVector VelocityDirection = Velocity.GetSafeNormal();
@@ -66,7 +66,7 @@ FVector UPortalsFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AA
 	return ConvertedVelocity;
 }
 
-bool UPortalsFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation)
+bool UPortalFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector ActorLocation)
 {
 	bool bVisible = false;
 	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0);
@@ -85,7 +85,7 @@ bool UPortalsFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObj
 	return bVisible;
 }
 
-bool UPortalsFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector)
+bool UPortalFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector ActorForwardVector)
 {
 	bool bVisible = false;
 	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0);
