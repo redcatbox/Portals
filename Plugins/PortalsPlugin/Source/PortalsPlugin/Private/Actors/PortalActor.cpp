@@ -69,7 +69,7 @@ void APortalActor::UpdateSCC2DTransform()
 		SceneCaptureComponent2D->ClipPlaneBase = TargetPortal->GetActorLocation();
 		SceneCaptureComponent2D->ClipPlaneNormal = TargetPortal->GetActorForwardVector();
 
-		APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
+		const APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
 		FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
 		FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
 
