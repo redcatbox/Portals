@@ -6,6 +6,7 @@
 #include "Runtime/CoreUObject/Public/UObject/NoExportTypes.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetRenderingLibrary.h"
+#include "UObject/SoftObjectPtr.h"
 #include "BaseRenderSurface.generated.h"
 
 UCLASS(Abstract)
@@ -22,7 +23,10 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditAnywhere, Category = MID)
+	UPROPERTY(EditAnywhere, Category = Material)
+	TSoftObjectPtr<UMaterial> RenderMaterial;
+
+	UPROPERTY(EditAnywhere, Category = Material)
 	FName RenderTargetParameterName;
 
 protected:

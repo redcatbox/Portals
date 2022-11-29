@@ -9,8 +9,9 @@ AMirrorActor::AMirrorActor()
 
 	SceneCaptureComponent2D->bEnableClipPlane = true;
 
+	RenderMaterial = FSoftObjectPath("/PortalsPlugin/Dev/Materials/Mirrors/M_MirrorBase.M_MirrorBase");
 	//Default assets
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Mirrors/M_MirrorBase.M_MirrorBase"));
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialObj(TEXT("/PortalsPlugin/Dev/Materials/Mirrors/M_MirrorBase.M_MirrorBase"));
 	//DefaultMaterial = MaterialObj.Object;
 	//MaterialAsset = DefaultMaterial;
 	//Default assets

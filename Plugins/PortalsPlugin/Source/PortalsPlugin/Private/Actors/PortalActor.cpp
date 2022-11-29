@@ -27,8 +27,6 @@ APortalActor::APortalActor()
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
 
-	TargetPortal = nullptr;
-
 	DestinationPoint = FVector::ZeroVector;
 }
 
@@ -57,7 +55,9 @@ void APortalActor::Tick(float DeltaTime)
 		}
 
 		if (bUseInnerReplacement)
+		{
 			UpdateReplacementRenderParams();
+		}
 	}
 }
 

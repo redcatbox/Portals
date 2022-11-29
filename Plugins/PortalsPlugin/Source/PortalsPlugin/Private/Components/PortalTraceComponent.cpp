@@ -149,7 +149,7 @@ void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* Portal
 			}
 #endif
 
-			APortalActor* Portal = Cast<APortalActor>(OutHit.Actor);
+			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
 			if (!Portal)
 			{
 				NumRicochets--;

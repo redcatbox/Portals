@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "4.26",
+	"EngineAssociation": "5.0",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -13,10 +13,7 @@
 	"Plugins": [
 		{
 			"Name": "PortalsPlugin",
-			"Enabled": true,
-			"WhitelistPlatforms": [
-				"Win64"
-			]
+			"Enabled": true
 		}
 	]
 }

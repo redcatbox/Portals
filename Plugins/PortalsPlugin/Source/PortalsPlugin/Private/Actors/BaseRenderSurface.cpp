@@ -8,7 +8,6 @@ ABaseRenderSurface::ABaseRenderSurface()
 	PrimaryActorTick.bCanEverTick = false;
 	//PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
-	// Default scene root
 	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
 	RootComponent = DefaultSceneRoot;
 	DefaultSceneRoot->Mobility = EComponentMobility::Static;
@@ -17,26 +16,21 @@ ABaseRenderSurface::ABaseRenderSurface()
 	SceneCaptureRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SceneCaptureRoot"));
 	SceneCaptureRoot->SetupAttachment(RootComponent);
 
-	// SceneCaptureComponent2D
 	SceneCaptureComponent2D = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCaptureComponent2D"));
 	SceneCaptureComponent2D->SetupAttachment(SceneCaptureRoot);
 	SceneCaptureComponent2D->bCaptureEveryFrame = false;
 	SceneCaptureComponent2D->bCaptureOnMovement = false;
 	SceneCaptureComponent2D->bAutoActivate = false;
 
-	// Static mesh component
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	bRenderEnabled = true;
 	bRenderTargetEqualsViewportSize = false;
-	RenderTargetTexture = nullptr;
 	RenderTargetResolution = FIntPoint(128);
 	RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 
 	RenderTargetParameterName = FName(TEXT("TextureRT"));
-
-	MID = nullptr;
 
 	bUseUpdateDistance = true;
 	MaxCaptureUpdateDistance = 1000.f;
@@ -47,7 +41,9 @@ void ABaseRenderSurface::EnableRender(bool bEnable)
 {
 	bRenderEnabled = bEnable;
 
-	if (bRenderEnabled && StaticMeshComponent->GetStaticMesh() && StaticMeshComponent->GetMaterial(0))
+	RenderMaterial.IsValid();
+
+	if (bRenderEnabled && StaticMeshComponent->GetStaticMesh() && RenderMaterial.IsValid())
 	{
 		if (bRenderTargetEqualsViewportSize)
 		{
@@ -64,15 +60,8 @@ void ABaseRenderSurface::EnableRender(bool bEnable)
 		RenderTargetTexture = UKismetRenderingLibrary::CreateRenderTarget2D(this, RenderTargetResolution.X, RenderTargetResolution.Y, RenderTargetFormat);
 		SceneCaptureComponent2D->TextureTarget = RenderTargetTexture;
 
-		if (UMaterialInterface* MI = StaticMeshComponent->GetMaterial(0))
-		{
-			MID = StaticMeshComponent->CreateDynamicMaterialInstance(0, MI);
-			MID->SetTextureParameterValue(RenderTargetParameterName, RenderTargetTexture);
-		}
-		else
-		{
-			MID = nullptr;
-		}
+		MID = StaticMeshComponent->CreateDynamicMaterialInstance(0, RenderMaterial.Get());
+		MID->SetTextureParameterValue(RenderTargetParameterName, RenderTargetTexture);
 	}
 	else
 	{
@@ -119,9 +108,7 @@ void ABaseRenderSurface::UpdateSCC2DTransform() {}
 //{
 //	Super::PostEditChangeProperty(PropertyChangedEvent);
 //	FName PropertyName = (PropertyChangedEvent.Property != NULL) ? PropertyChangedEvent.Property->GetFName() : NAME_None;
-//	if (PropertyName == TEXT("StaticMeshComponent")
-//		|| TEXT("bRenderTargetEqualsViewportSize") || TEXT("RenderTargetResolution") || TEXT("RenderTargetFormat")
-//		|| TEXT("bUseUpdateDistance") || TEXT("MaxCaptureUpdateDistance") || TEXT("bUseUpdateDirection"))
+//	if (PropertyName == TEXT("RenderMaterial"))
 //	{}
 //}
 //#endif
