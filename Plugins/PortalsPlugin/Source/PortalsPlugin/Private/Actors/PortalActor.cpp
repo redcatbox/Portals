@@ -2,7 +2,10 @@
 
 #include "Actors/PortalActor.h"
 #include "Components/PortalComponent.h"
+#include "Components/BoxComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "Objects/PortalFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 APortalActor::APortalActor()
 {
@@ -27,7 +30,11 @@ APortalActor::APortalActor()
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	StaticMeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
 
+	ProceduralMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("ProceduralMesh"));
+
 	DestinationPoint = FVector::ZeroVector;
+
+	RenderMaterial = FSoftObjectPath("/PortalsPlugin/Dev/Materials/Portals/M_PortalBase.M_PortalBase");
 }
 
 void APortalActor::BeginPlay()

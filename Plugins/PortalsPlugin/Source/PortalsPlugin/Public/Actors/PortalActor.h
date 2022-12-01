@@ -26,10 +26,10 @@ public:
 	bool bUseInnerReplacement;
 
 	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = Portal)
-	UPortalComponent* PortalComponent;
+	class UPortalComponent* PortalComponent;
 
 	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = BoxCollision)
-	UBoxComponent* BoxCollision;
+	class UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BoxCollision)
 	FVector BoxExtent;
@@ -48,4 +48,8 @@ public:
 	virtual void EditorApplyScale(const FVector& DeltaScale, const FVector* PivotLocation, bool bAltDown, bool bShiftDown, bool bCtrlDown) override;
 	virtual void EditorApplyMirror(const FVector& MirrorScale, const FVector& PivotLocation) override;
 #endif
+
+protected:
+	UPROPERTY()
+	class UProceduralMeshComponent* ProceduralMesh;
 };

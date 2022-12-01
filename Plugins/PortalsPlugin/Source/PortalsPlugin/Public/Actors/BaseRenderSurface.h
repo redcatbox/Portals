@@ -2,10 +2,11 @@
 
 #pragma once
 
-#include "Engine.h"
-#include "Runtime/CoreUObject/Public/UObject/NoExportTypes.h"
+#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/KismetRenderingLibrary.h"
+//#include "UObject/NoExportTypes.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "Engine/TextureRenderTarget2D.h"
 #include "UObject/SoftObjectPtr.h"
 #include "BaseRenderSurface.generated.h"
 

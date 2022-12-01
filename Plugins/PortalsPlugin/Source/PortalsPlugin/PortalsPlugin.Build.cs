@@ -36,7 +36,8 @@ public class PortalsPlugin : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"PhysicsCore"
+				"PhysicsCore",
+				"ProceduralMeshComponent"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

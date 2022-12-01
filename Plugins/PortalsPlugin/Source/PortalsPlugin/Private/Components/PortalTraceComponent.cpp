@@ -3,6 +3,7 @@
 #include "Components/PortalTraceComponent.h"
 #include "Actors/PortalActor.h"
 #include "Objects/PortalFunctionLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 #if ENABLE_DRAW_DEBUG
 #include "DrawDebugHelpers.h"

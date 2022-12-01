@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Actors/BaseRenderSurface.h"
+#include "PortalsPlugin.h"
 #include "Objects/PortalFunctionLibrary.h"
+#include "Kismet/KismetRenderingLibrary.h"
+#include "Engine/StreamableManager.h"
 
 ABaseRenderSurface::ABaseRenderSurface()
 {
@@ -26,7 +29,7 @@ ABaseRenderSurface::ABaseRenderSurface()
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	bRenderEnabled = true;
-	bRenderTargetEqualsViewportSize = false;
+	bRenderTargetEqualsViewportSize = true;
 	RenderTargetResolution = FIntPoint(128);
 	RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
 
@@ -41,9 +44,22 @@ void ABaseRenderSurface::EnableRender(bool bEnable)
 {
 	bRenderEnabled = bEnable;
 
-	RenderMaterial.IsValid();
+	if (!StaticMeshComponent->GetStaticMesh())
+	{
+		UE_LOG(LogPortals, Warning, TEXT("Static mesh is not valid!"));
+		UE_LOG(LogPortals, Warning, TEXT("Can't enable render."));
+		bRenderEnabled = false;
+	}
 
-	if (bRenderEnabled && StaticMeshComponent->GetStaticMesh() && RenderMaterial.IsValid())
+	RenderMaterial.LoadSynchronous();
+	if (!RenderMaterial.IsValid())
+	{
+		UE_LOG(LogPortals, Warning, TEXT("Render material is not valid!"));
+		UE_LOG(LogPortals, Warning, TEXT("Can't enable render."));
+		bRenderEnabled = false;
+	}
+
+	if (bRenderEnabled)
 	{
 		if (bRenderTargetEqualsViewportSize)
 		{

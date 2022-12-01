@@ -4,6 +4,8 @@
 
 #define LOCTEXT_NAMESPACE "FPortalsPluginModule"
 
+DEFINE_LOG_CATEGORY(LogPortals);
+
 void FPortalsPluginModule::StartupModule()
 {
 }

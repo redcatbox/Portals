@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogPortals, Log, All);
+
 class FPortalsPluginModule : public IModuleInterface
 {
 public:
