@@ -1,104 +1,87 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Objects/PortalFunctionLibrary.h"
+#include "PortalsPlugin.h"
 #include "Kismet/GameplayStatics.h"
 
-FVector UPortalFunctionLibrary::PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector InDirection)
+void UPortalFunctionLibrary::PortalConvertDirection(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InDirection, FVector& OutDirection)
 {
 	const FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
 	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
 	
-	FVector ConvertedDirection = CurrentPortalTransform.InverseTransformVectorNoScale(InDirection);
-	ConvertedDirection = FMath::GetReflectionVector(ConvertedDirection, FVector(1.f, 0.f, 0.f));
-	ConvertedDirection = FMath::GetReflectionVector(ConvertedDirection, FVector(0.f, 1.f, 0.f));
-	ConvertedDirection = TargetPortalTransform.TransformVectorNoScale(ConvertedDirection);
-	return ConvertedDirection;
+	OutDirection = CurrentPortalTransform.InverseTransformVectorNoScale(InDirection);
+	OutDirection = FMath::GetReflectionVector(OutDirection, FVector(1.f, 0.f, 0.f));
+	OutDirection = FMath::GetReflectionVector(OutDirection, FVector(0.f, 1.f, 0.f));
+	OutDirection = TargetPortalTransform.TransformVectorNoScale(OutDirection);
 }
 
-FVector UPortalFunctionLibrary::PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector InLocation)
+void UPortalFunctionLibrary::PortalConvertLocation(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InLocation, FVector& OutLocation)
 {
 	FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
-	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
-	
 	FVector Scale = CurrentPortalTransform.GetScale3D();
-	Scale = FVector(Scale.X * -1.f, Scale.Y * -1.f, Scale.Z);
+	Scale = FVector(-Scale.X, -Scale.Y, Scale.Z);
 	CurrentPortalTransform.SetScale3D(Scale);
 
-	FVector ConvertedLocation = CurrentPortalTransform.InverseTransformPositionNoScale(InLocation);
-	ConvertedLocation = TargetPortalTransform.TransformPositionNoScale(ConvertedLocation);
-	return ConvertedLocation;
+	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
+	
+	const FVector ConvertedLocation = CurrentPortalTransform.InverseTransformPosition(InLocation);
+	OutLocation = TargetPortalTransform.TransformPositionNoScale(ConvertedLocation);
 }
 
-FVector UPortalFunctionLibrary::PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector InLocation)
+void UPortalFunctionLibrary::PortalConvertLocationMirrored(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InLocation, FVector& OutLocation)
 {
 	FTransform CurrentPortalTransform = CurrentPortal ? CurrentPortal->GetActorTransform() : FTransform();
-	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
-	
 	FVector Scale = CurrentPortalTransform.GetScale3D();
-	Scale = FVector(Scale.X, Scale.Y * -1.f, Scale.Z);
+	Scale = FVector(Scale.X, -Scale.Y, Scale.Z);
 	CurrentPortalTransform.SetScale3D(Scale);
 
-	FVector ConvertedLocation = CurrentPortalTransform.InverseTransformPositionNoScale(InLocation);
-	ConvertedLocation = TargetPortalTransform.TransformPositionNoScale(ConvertedLocation);
-	return ConvertedLocation;
+	const FTransform TargetPortalTransform = TargetPortal ? TargetPortal->GetActorTransform() : FTransform();
+
+	const FVector ConvertedLocation = CurrentPortalTransform.InverseTransformPosition(InLocation);
+	OutLocation = TargetPortalTransform.TransformPositionNoScale(ConvertedLocation);
 }
 
-FRotator UPortalFunctionLibrary::PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator InRotation)
+void UPortalFunctionLibrary::PortalConvertRotation(const AActor* CurrentPortal, const AActor* TargetPortal, const FRotator& InRotation, FRotator& OutRotation)
 {
-	FRotationMatrix R(InRotation);
-	FVector X;
-	FVector Y;
-	FVector Z;
-	R.GetScaledAxes(X, Y, Z);
-	
-	FVector DirX = PortalConvertDirection(CurrentPortal, TargetPortal, X);
-	FVector DirY = PortalConvertDirection(CurrentPortal, TargetPortal, Y);
-
-	const FRotator ConvertedRotation = FRotationMatrix::MakeFromXY(X, Y).Rotator();
-	return ConvertedRotation;
+	const FQuat Rotation = InRotation.Quaternion();
+	FVector DirX, DirY;
+	PortalConvertDirection(CurrentPortal, TargetPortal, Rotation.GetAxisX(), DirX);
+	PortalConvertDirection(CurrentPortal, TargetPortal, Rotation.GetAxisY(), DirY);
+	OutRotation = FRotationMatrix::MakeFromXY(DirX, DirY).Rotator();
 }
 
-FVector UPortalFunctionLibrary::PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector InVelocity)
+void UPortalFunctionLibrary::PortalConvertVelocity(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InVelocity, FVector& OutVelocity)
 {
-	const float VelocitySize = InVelocity.Size();
-	const FVector VelocityDirection = InVelocity.GetSafeNormal();
-	const FVector ConvertedVelocity = PortalConvertDirection(CurrentPortal, TargetPortal, VelocityDirection) * VelocitySize;
-	return ConvertedVelocity;
+	PortalConvertDirection(CurrentPortal, TargetPortal, InVelocity.GetSafeNormal(), OutVelocity);
+	OutVelocity *= InVelocity.Size();
 }
 
-bool UPortalFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector InActorLocation)
+bool UPortalFunctionLibrary::CheckVisibilityByDistance(UObject* WorldContextObject, const float& MaxRenderDistance, const FVector& ActorLocation)
 {
-	bool bVisible = false;
-	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0);
-
-	if (PlayerCameraManager)
+	if (const APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0))
 	{
 		const FVector PlayerCameraLocation = PlayerCameraManager->GetCameraLocation();
-		const float Distance = (PlayerCameraLocation - InActorLocation).Size();
-
+		const float Distance = (PlayerCameraLocation - ActorLocation).Size();
 		if (Distance <= MaxRenderDistance)
 		{
-			bVisible = true;
+			return true;
 		}
 	}
 
-	return bVisible;
+	return false;
 }
 
-bool UPortalFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector InActorForwardVector)
+bool UPortalFunctionLibrary::CheckVisibilityByDirection(UObject* WorldContextObject, const FVector& ActorLocation, const FVector& ActorForwardVector)
 {
-	bool bVisible = false;
-	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0);
-	if (PlayerCameraManager)
+	if (const APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(WorldContextObject, 0))
 	{
 		const FVector PlayerCameraLocation = PlayerCameraManager->GetCameraLocation();
-		const float Projection = FVector::DotProduct(PlayerCameraLocation - ActorLocation, InActorForwardVector);
-
+		const float Projection = FVector::DotProduct(PlayerCameraLocation - ActorLocation, ActorForwardVector);
 		if (Projection >= 0)
 		{
-			bVisible = true;
+			return true;
 		}
 	}
 	
-	return bVisible;
+	return false;
 }

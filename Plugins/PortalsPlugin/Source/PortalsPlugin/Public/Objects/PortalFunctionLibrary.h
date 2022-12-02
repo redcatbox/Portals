@@ -14,23 +14,23 @@ class PORTALSPLUGIN_API UPortalFunctionLibrary : public UBlueprintFunctionLibrar
 
 public:
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static FVector PortalConvertDirection(AActor* CurrentPortal, AActor* TargetPortal, FVector InDirection);
+	static void PortalConvertDirection(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InDirection, FVector& OutDirection);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static FVector PortalConvertLocation(AActor* CurrentPortal, AActor* TargetPortal, FVector InLocation);
+	static void PortalConvertLocation(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InLocation, FVector& OutLocation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static FVector PortalConvertLocationMirrored(AActor* CurrentPortal, AActor* TargetPortal, FVector InLocation);
+	static void PortalConvertLocationMirrored(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InLocation, FVector& OutLocation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static FRotator PortalConvertRotation(AActor* CurrentPortal, AActor* TargetPortal, FRotator InRotation);
+	static void PortalConvertRotation(const AActor* CurrentPortal, const AActor* TargetPortal, const FRotator& InRotation, FRotator& OutRotation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static FVector PortalConvertVelocity(AActor* CurrentPortal, AActor* TargetPortal, FVector InVelocity);
+	static void PortalConvertVelocity(const AActor* CurrentPortal, const AActor* TargetPortal, const FVector& InVelocity, FVector& OutVelocity);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static bool CheckVisibilityByDistance(UObject* WorldContextObject, float MaxRenderDistance, FVector InActorLocation);
+	static bool CheckVisibilityByDistance(UObject* WorldContextObject, const float& MaxRenderDistance, const FVector& ActorLocation);
 
 	UFUNCTION(BlueprintCallable, Category = PortalsFunctions)
-	static bool CheckVisibilityByDirection(UObject* WorldContextObject, FVector ActorLocation, FVector InActorForwardVector);
+	static bool CheckVisibilityByDirection(UObject* WorldContextObject, const FVector& ActorLocation, const FVector& ActorForwardVector);
 };

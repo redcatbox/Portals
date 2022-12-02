@@ -2,6 +2,7 @@
 
 #include "Actors/MirrorActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "Objects/PortalFunctionLibrary.h"
 
 AMirrorActor::AMirrorActor()
 {
@@ -46,30 +47,28 @@ void AMirrorActor::UpdateSCC2DTransform()
 	SceneCaptureComponent2D->ClipPlaneBase = ActorLocation;
 	SceneCaptureComponent2D->ClipPlaneNormal = ActorForwardVector;
 
-	APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
+	if (APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+	{
+		FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
+		FTransform ActorTransform = GetActorTransform();
+		SceneCaptureLocation = ActorTransform.InverseTransformPosition(SceneCaptureLocation);
+		FVector Scale = ActorTransform.GetScale3D();
+		Scale = FVector(-Scale.X, Scale.Y, Scale.Z);
+		ActorTransform.SetScale3D(Scale);
+		SceneCaptureLocation = ActorTransform.TransformPosition(SceneCaptureLocation);
 
-	SceneCaptureComponent2D->FOVAngle = PlayerCameraManager->GetFOVAngle();
+		FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
+		FVector X, Y, Z;
+		FRotationMatrix R(SceneCaptureRotation);
+		R.GetScaledAxes(X, Y, Z);
+		X = FMath::GetReflectionVector(X, ActorForwardVector);
+		Y = FMath::GetReflectionVector(Y, ActorForwardVector);
+		Z = FMath::GetReflectionVector(Z, ActorForwardVector);
+		SceneCaptureRotation = FRotationMatrix::MakeFromXY(X, Y).Rotator();
 
-	FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
-	FTransform ActorTransform = GetActorTransform();
-	SceneCaptureLocation = ActorTransform.InverseTransformPosition(SceneCaptureLocation);
-	FVector Scale = ActorTransform.GetScale3D();
-	Scale = FVector(Scale.X * -1.f, Scale.Y, Scale.Z);
-	ActorTransform.SetScale3D(Scale);
-	SceneCaptureLocation = ActorTransform.TransformPosition(SceneCaptureLocation);
-
-	FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
-	FVector X;
-	FVector Y;
-	FVector Z;
-	FRotationMatrix R(SceneCaptureRotation);
-	R.GetScaledAxes(X, Y, Z);
-	X = FMath::GetReflectionVector(X, ActorForwardVector);
-	Y = FMath::GetReflectionVector(Y, ActorForwardVector);
-	Z = FMath::GetReflectionVector(Z, ActorForwardVector);
-	SceneCaptureRotation = FRotationMatrix::MakeFromXY(X, Y).Rotator();
-
-	SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
+		SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
+		SceneCaptureComponent2D->FOVAngle = PlayerCameraManager->GetFOVAngle();
+	}
 }
 
 #if WITH_EDITOR

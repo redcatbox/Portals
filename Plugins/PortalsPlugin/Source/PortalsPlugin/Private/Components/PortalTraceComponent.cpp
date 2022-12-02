@@ -60,8 +60,10 @@ void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* Portal
 {
 	if (PortalActor && PortalActor->TargetPortal)
 	{
-		FVector Start = UPortalFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart);
-		FVector Direction = UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection.GetSafeNormal());
+		FVector Start;
+		FVector Direction = TraceDirection.GetSafeNormal();
+		UPortalFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart, Start);
+		UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, Direction, Direction);
 		//Start += Direction;
 		float Distance = MaxTraceDistance;
 		FVector End = Start + Direction * Distance;
@@ -89,7 +91,7 @@ void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* Portal
 			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
 			if (Portal)
 			{
-				Direction = UPortalFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, Direction);
+				UPortalFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, Direction, Direction);
 			}
 			else
 			{

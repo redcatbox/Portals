@@ -44,8 +44,10 @@ void APortalActor::BeginPlay()
 	if (bRenderEnabled)
 	{
 		EnableRender(bRenderEnabled);
-		APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
-		AddTickPrerequisiteActor(PlayerCameraManager);
+		if (APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+		{
+			AddTickPrerequisiteActor(PlayerCameraManager);
+		}
 	}
 }
 
@@ -72,18 +74,20 @@ void APortalActor::UpdateSCC2DTransform()
 {
 	if (TargetPortal)
 	{
-		//Update clip plane
 		SceneCaptureComponent2D->ClipPlaneBase = TargetPortal->GetActorLocation();
 		SceneCaptureComponent2D->ClipPlaneNormal = TargetPortal->GetActorForwardVector();
 
-		const APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
-		FVector SceneCaptureLocation = PlayerCameraManager->GetCameraLocation();
-		FRotator SceneCaptureRotation = PlayerCameraManager->GetCameraRotation();
+		if (const APlayerCameraManager* PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+		{
+			FVector SceneCaptureLocation;
+			FRotator SceneCaptureRotation;
 
-		SceneCaptureLocation = UPortalFunctionLibrary::PortalConvertLocation(this, TargetPortal, SceneCaptureLocation);
-		SceneCaptureRotation = UPortalFunctionLibrary::PortalConvertRotation(this, TargetPortal, SceneCaptureRotation);
+			UPortalFunctionLibrary::PortalConvertLocation(this, TargetPortal, PlayerCameraManager->GetCameraLocation(), SceneCaptureLocation);
+			UPortalFunctionLibrary::PortalConvertRotation(this, TargetPortal, PlayerCameraManager->GetCameraRotation(), SceneCaptureRotation);
 
-		SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
+			SceneCaptureComponent2D->SetWorldLocationAndRotationNoPhysics(SceneCaptureLocation, SceneCaptureRotation);
+			SceneCaptureComponent2D->FOVAngle = PlayerCameraManager->GetFOVAngle();
+		}
 	}
 }
 
