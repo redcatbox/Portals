@@ -51,6 +51,9 @@ protected:
 	UPROPERTY()
 	UTextureRenderTarget2D* RenderTargetTexture;
 
+	UPROPERTY()
+	bool bShouldClearRT;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SceneCapture)
 	FIntPoint RenderTargetResolution;

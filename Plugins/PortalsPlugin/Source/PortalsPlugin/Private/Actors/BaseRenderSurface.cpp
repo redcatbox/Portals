@@ -114,6 +114,17 @@ bool ABaseRenderSurface::CheckSCCNeedsToUpdate()
 		}
 	}
 
+	if (bUpdate)
+	{
+		bShouldClearRT = true;
+	}
+
+	if (!bUpdate && bShouldClearRT)
+	{
+		UKismetRenderingLibrary::ClearRenderTarget2D(this, RenderTargetTexture);
+		bShouldClearRT = false;
+	}
+
 	return bUpdate;
 }
 

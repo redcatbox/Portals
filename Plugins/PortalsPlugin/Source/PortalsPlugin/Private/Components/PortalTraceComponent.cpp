@@ -9,15 +9,19 @@
 #include "DrawDebugHelpers.h"
 #endif
 
-void UPortalTraceComponent::TraceRicochets(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers)
+void UPortalTraceComponent::TraceRicochets(FVector& TraceStart, FVector& TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers)
 {
 	if (MaxNumRicochets > -1)
 	{
 		FVector Start = TraceStart;
-		FVector Direction = TraceDirection.GetSafeNormal();
+		FVector Direction = TraceDirection;
 		float Distance = MaxTraceDistance;
 		FVector End = Start + Direction * Distance;
 		int32 NumRicochets = MaxNumRicochets;
+		if (MaxNumRicochets > 1)
+		{
+			NumRicochets = FMath::RandRange(1, MaxNumRicochets);
+		}
 
 		bool bHit;
 		FHitResult OutHit;
@@ -56,169 +60,38 @@ void UPortalTraceComponent::TraceRicochets(FVector TraceStart, FVector TraceDire
 	}
 }
 
-void UPortalTraceComponent::PortalRecursivelyTrace(APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, bool bDrawDebugHelpers)
+void UPortalTraceComponent::PortalRecursivelyTraceRicochets(const APortalActor* PortalActor, const FVector& TraceStart, const FVector& TraceDirection, const float MaxTraceDistance, const int32 MaxNumRicochets, const bool bDrawDebugHelpers)
 {
+	FVector Start, Direction, End;
+	float Distance = MaxTraceDistance;
+	int32 NumRicochets = MaxNumRicochets;
+	if (MaxNumRicochets > 1)
+	{
+		NumRicochets = FMath::RandRange(1, MaxNumRicochets);
+	}
+
+	bool bShouldTraceAgain = false;
+
 	if (PortalActor && PortalActor->TargetPortal)
 	{
-		FVector Start, Direction;
 		UPortalFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart, Start);
-		UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection.GetSafeNormal(), Direction);
-		//Start += Direction;
-		float Distance = MaxTraceDistance;
-		FVector End = Start + Direction * Distance;
+		UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection, Direction);
+		Start += Direction;
+		End = Start + Direction * Distance;
 
-		bool bHit;
-		FHitResult OutHit;
-
-		if (bDrawDebugHelpers)
-		{
-			TArray<AActor*> ActorsToIgnore;
-			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
-		}
-		else
-		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
-			TraceParams.bReturnPhysicalMaterial = true;
-			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
-		}
-
-		if (bHit)
-		{
-			Distance -= OutHit.Distance;
-
-			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
-			if (Portal)
-			{
-				UPortalFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, TraceDirection.GetSafeNormal(), Direction);
-			}
-			else
-			{
-				Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
-			}
-
-			Start = OutHit.ImpactPoint + Direction;
-
-#if ENABLE_DRAW_DEBUG
-			if (bDrawDebugHelpers)
-			{
-				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
-				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
-				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
-			}
-#endif
-
-			PortalRecursivelyTrace(Portal, Start, Direction, Distance);
-		}
-	}
-	else
-	{
-		FVector Start = TraceStart;
-		FVector Direction = TraceDirection.GetSafeNormal();
-		float Distance = MaxTraceDistance;
-		FVector End = Start + Direction * Distance;
-
-		bool bHit;
-		FHitResult OutHit;
-
-		if (bDrawDebugHelpers)
-		{
-			TArray<AActor*> ActorsToIgnore;
-			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
-		}
-		else
-		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
-			TraceParams.bReturnPhysicalMaterial = true;
-			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
-		}
-
-		if (bHit)
-		{
-			Distance -= OutHit.Distance;
-			Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
-			Start = OutHit.ImpactPoint + Direction;
-
-#if ENABLE_DRAW_DEBUG
-			if (bDrawDebugHelpers)
-			{
-				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
-				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
-				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
-			}
-#endif
-
-			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
-			PortalRecursivelyTrace(Portal, Start, Direction, Distance, bDrawDebugHelpers);
-		}
-	}
-}
-
-void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers)
-{
-	if (PortalActor && PortalActor->TargetPortal)
-	{
-		FVector Start, Direction;
-		UPortalFunctionLibrary::PortalConvertLocation(PortalActor, PortalActor->TargetPortal, TraceStart, Start);
-		UPortalFunctionLibrary::PortalConvertDirection(PortalActor, PortalActor->TargetPortal, TraceDirection.GetSafeNormal(), Direction);
-		//Start += Direction;
-		float Distance = MaxTraceDistance;
-		FVector End = Start + Direction * Distance;
-		int32 NumRicochets = MaxNumRicochets;
-
-		bool bHit;
-		FHitResult OutHit;
-
-		if (bDrawDebugHelpers)
-		{
-			TArray<AActor*> ActorsToIgnore;
-			bHit = UKismetSystemLibrary::LineTraceSingle(this, Start, End, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHit, true, FLinearColor::Red, FLinearColor::Green, 5.f);
-		}
-		else
-		{
-			FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PortalTrace), true, GetOwner());
-			TraceParams.bReturnPhysicalMaterial = true;
-			bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECollisionChannel::ECC_Visibility, TraceParams);
-		}
-
-		if (bHit)
-		{
-			Distance -= OutHit.Distance;
-
-			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
-			if (Portal)
-			{
-				UPortalFunctionLibrary::PortalConvertDirection(Portal, Portal->TargetPortal, TraceDirection.GetSafeNormal(), Direction);
-			}
-			else
-			{
-				Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
-			}
-
-			Start = OutHit.ImpactPoint + Direction;
-
-#if ENABLE_DRAW_DEBUG
-			if (bDrawDebugHelpers)
-			{
-				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
-				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
-				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
-			}
-#endif
-
-			PortalRecursivelyTraceRicochets(Portal, Start, Direction, Distance, NumRicochets);
-		}
+		bShouldTraceAgain = true;
 	}
 	else if (MaxNumRicochets > -1)
 	{
-		FVector Start = TraceStart;
-		FVector Direction = TraceDirection.GetSafeNormal();
-		float Distance = MaxTraceDistance;
-		FVector End = Start + Direction * Distance;
-		int32 NumRicochets = MaxNumRicochets;
+		Start = TraceStart;
+		Direction = TraceDirection;
+		End = Start + Direction * Distance;
 
+		bShouldTraceAgain = true;
+	}
+
+	if (bShouldTraceAgain)
+	{
 		bool bHit;
 		FHitResult OutHit;
 
@@ -236,24 +109,29 @@ void UPortalTraceComponent::PortalRecursivelyTraceRicochets(APortalActor* Portal
 
 		if (bHit)
 		{
-			Distance -= OutHit.Distance;
-			Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
-			Start = OutHit.ImpactPoint + Direction;
-
 #if ENABLE_DRAW_DEBUG
 			if (bDrawDebugHelpers)
 			{
 				const FVector AxisY = FVector::CrossProduct(-TraceDirection, OutHit.ImpactNormal);
 				const FVector AxisX = FVector::CrossProduct(AxisY, OutHit.ImpactNormal);
 				const FRotator DebugRot = FRotationMatrix::MakeFromXZ(AxisX, OutHit.ImpactNormal).Rotator();
-				DrawDebugCoordinateSystem(GetWorld(), Start, DebugRot, 100.f, false, 5.f, 0, 2.f);
+				DrawDebugCoordinateSystem(GetWorld(), OutHit.ImpactPoint, DebugRot, 100.f, false, 5.f, 0, 2.f);
 			}
 #endif
 
+			Distance -= OutHit.Distance;
+
 			APortalActor* Portal = Cast<APortalActor>(OutHit.GetActor());
-			if (!Portal)
+			if (Portal)
+			{
+				Start = OutHit.ImpactPoint;
+			}
+			else
 			{
 				NumRicochets--;
+
+				Direction = FMath::GetReflectionVector(Direction, OutHit.ImpactNormal);
+				Start = OutHit.ImpactPoint + Direction;
 			}
 
 			PortalRecursivelyTraceRicochets(Portal, Start, Direction, Distance, NumRicochets, bDrawDebugHelpers);

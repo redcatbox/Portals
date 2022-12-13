@@ -18,15 +18,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
 	bool bDrawDebugInfo;
 
-	//Trace on provided max distance and max number of ricochets
+	// Trace on provided max distance and max number of ricochets
 	UFUNCTION(BlueprintCallable, Category = PortalTracing)
-	virtual void TraceRicochets(FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers = false);
-
-	// Trace checking for portal actors recursively on provided max distance
-	UFUNCTION(BlueprintCallable, Category = PortalTracing)
-	virtual void PortalRecursivelyTrace(class APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, bool bDrawDebugHelpers = false);
+	virtual void TraceRicochets(FVector& TraceStart, FVector& TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers = false);
 
 	// Trace checking for portal actors recursively on provided max distance and max number of ricochets
 	UFUNCTION(BlueprintCallable, Category = PortalTracing)
-	virtual void PortalRecursivelyTraceRicochets(class APortalActor* PortalActor, FVector TraceStart, FVector TraceDirection, float MaxTraceDistance, int32 MaxNumRicochets, bool bDrawDebugHelpers = false);
+	virtual void PortalRecursivelyTraceRicochets(const class APortalActor* PortalActor, const FVector& TraceStart, const FVector& TraceDirection, const float MaxTraceDistance, const int32 MaxNumRicochets, const bool bDrawDebugHelpers = false);
 };
