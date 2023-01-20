@@ -22,9 +22,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void UpdateSCC2DTransform() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Portal)
-	bool bUseInnerReplacement;
-
 	UPROPERTY(EditDefaultsOnly, NonTransactional, Category = Portal)
 	class UPortalComponent* PortalComponent;
 
@@ -39,9 +36,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector DestinationPoint;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void UpdateReplacementRenderParams();
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;

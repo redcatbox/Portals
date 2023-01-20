@@ -12,8 +12,6 @@ APortalActor::APortalActor()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickGroup = ETickingGroup::TG_PostUpdateWork;
 
-	bUseInnerReplacement = false;
-
 	PortalComponent = CreateDefaultSubobject<UPortalComponent>(TEXT("PortalComponent"));
 	PortalComponent->SetupAttachment(RootComponent);
 
@@ -62,11 +60,6 @@ void APortalActor::Tick(float DeltaTime)
 			UpdateSCC2DTransform();
 			SceneCaptureComponent2D->CaptureScene();
 		}
-
-		if (bUseInnerReplacement)
-		{
-			UpdateReplacementRenderParams();
-		}
 	}
 }
 
@@ -90,8 +83,6 @@ void APortalActor::UpdateSCC2DTransform()
 		}
 	}
 }
-
-void APortalActor::UpdateReplacementRenderParams() {}
 
 #if WITH_EDITOR
 void APortalActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
