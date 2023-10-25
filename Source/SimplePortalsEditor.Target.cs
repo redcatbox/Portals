@@ -8,7 +8,8 @@ public class SimplePortalsEditorTarget : TargetRules
 	public SimplePortalsEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.Add("SimplePortals");
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+        ExtraModuleNames.Add("SimplePortals");
 	}
 }
